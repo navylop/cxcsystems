@@ -1,0 +1,278 @@
+//
+// blog.scss
+//
+.blog-post {
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
+    .blog-img {
+        .overlay,
+        .post-meta {
+            position: absolute;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        .overlay {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: $dark;
+        }
+        .post-meta {
+            bottom: 5%;
+            right: 5%;
+            z-index: 1;
+            .read-more {
+                &:hover {
+                    color: $primary !important;
+                }
+            }
+        }
+    }
+    .content {
+        h1, h2, h3, h4, h5, h6 {
+            line-height: 1.2;
+        }
+        .title {
+            font-size: 18px;
+            &:hover {
+                color: $primary !important;
+            }
+        }
+        .author {
+            .name {
+                &:hover {
+                    color: $primary !important;
+                }
+            }
+        }
+    }
+    &:hover {
+        transform: translateY(-7px);
+        box-shadow: $shadow;
+        .blog-img {
+            .overlay {
+                opacity: 0.65;
+            }
+            .post-meta {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+//page-profile.html (profile-post)
+.blog-post .post-meta,
+.profile-post {
+    .like {
+        i {
+            -webkit-text-stroke: 2px $danger;
+            -webkit-text-fill-color: transparent;
+        }
+        &:active, &:focus {
+            i {
+                -webkit-text-stroke: 0px $danger;
+                -webkit-text-fill-color: $danger;
+            }
+        }
+    }
+}
+//Sidebar
+.sidebar {
+    position: sticky;
+    top: 80px;
+    .widget {
+        .widget-search {
+            form {
+                position: relative;
+            }
+        }
+        .widget-search, .searchform { 
+            input[type="text"] {
+                box-shadow: none;
+                padding: 12px 15px;
+                height: 45px;
+                font-size: 14px;
+                display: block;
+                width: 100%;
+                outline: none !important;
+                padding-right: 45px;
+            }
+            input[type="submit"] {
+                position: absolute;
+                top: 5px;
+                right: 10px;
+                opacity: 0;
+                width: 40px;
+                height: 40px;
+            }
+        }
+        .widget-search {
+            .searchform:after {
+                content: "\F0349";
+                position: absolute;
+                font-family: "Material Design Icons";
+                right: 16px;
+                top: 15px;
+                font-size: 20px;
+                line-height: 20px;
+                pointer-events: none;
+            }
+        }
+        .widget-title {
+            font-size: 18px;
+        }
+        
+        .catagory{
+            li {
+                padding-bottom: 10px;
+                &:last-child {
+                    padding-bottom: 0;
+                }
+                a, span {
+                    font-size: 15px;
+                }
+                a {
+                    color: $dark;
+                    transition: all 0.5s ease;
+                    &:hover {
+                        color: $primary;
+                    }
+                }
+            }
+        }      
+        .post-recent {
+            padding-bottom: 15px;
+            &:last-child {
+                padding-bottom: 0;
+            }
+            .post-recent-thumb {
+                width: 25%;
+            }
+            
+            .post-recent-content {
+                width: 75%;
+                padding-left: 10px;
+                a {
+                    display: block;
+                    color: $dark;
+                    font-size: 15px;
+                    transition: all 0.5s ease;
+                    &:hover {
+                        color: $primary;
+                    }
+                }
+                span {
+                    font-size: 13px;
+                }
+            }
+        }
+        .tagcloud {
+            > a {
+                background: $gray-200;
+                color: $dark;
+                display: inline-block;
+                font-size: 9px;
+                letter-spacing: 1px;
+                margin: 5px 10px 5px 0;
+                padding: 8px 12px;
+                text-transform: uppercase;
+                transition: all 0.5s ease;
+                &:hover {
+                    background: $primary;
+                    color: $white;
+                }
+            }
+        }
+        .widget-grid {
+            .item {
+                position: relative;
+                width: 25%;
+                padding-top: 25%;
+                float: left;
+                a {
+                    position: absolute;
+                    display: block;
+                    top: 4px;
+                    left: 4px;
+                    right: 4px;
+                    bottom: 4px;
+                    overflow: hidden;
+                    img {
+                        position: absolute;
+                        width: 100%;
+                        top: 0;
+                        left: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// single blog
+.page-title {
+    font-size: 20px;
+}
+
+.media-list {
+    .comment-desk {
+        .commentor {
+            img {
+                height: 50px;
+            }
+        }
+        .media-heading {
+            font-size: 16px;
+        }
+        a {
+            &:hover{
+                color: $primary !important;
+            }
+        }
+    }
+    .sub-comment {
+        border-left: 2px dashed $gray-300;
+    }
+}
+
+.blog{
+    .blog-primary{
+        .blog-line{
+            border-color: $dark !important;
+        }
+        
+    }
+    .blog-line {
+        position: absolute;
+        top: 50%;
+        transform: translateY(50%);
+        left: 0;
+        right: 0;
+        border-top: 1px dashed;
+    }
+    
+    .blog-icon{
+        position: relative;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        font-size: 20px;
+    }
+}
+
+.blockquote {
+    &.block-style-one {
+        border-left: 4px solid $primary;
+        background: $gray-100;
+        i {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            opacity: 0.07;
+            font-size: 100px;
+        }
+    }
+}

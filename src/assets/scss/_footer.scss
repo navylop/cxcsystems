@@ -1,0 +1,53 @@
+//
+// footer.scss
+//
+.footer {
+    padding: 60px 0;
+    position: relative;
+    color: $gray-500;
+    .logo-footer {
+        font-weight: 700;
+        font-size: 22px;
+        padding: 3px 0;
+        letter-spacing: 1px;
+    }
+    .footer-head {
+        font-size: 18px; 
+        letter-spacing: 0.8px;         
+        font-weight: 600;
+    }
+    .text-foot {
+        color: $gray-500;
+    }
+    .footer-list {
+        margin-bottom: 0;
+        li {
+            margin-bottom: 10px;
+            a {
+                transition: all 0.5s ease;
+                &:hover {
+                    color: $primary !important;
+                }
+            }   
+            &:last-child{
+                margin-bottom: 0;
+            }         
+        }
+    }    
+    &.footer-bar {
+        padding: 30px 0;
+        border-top: 1px solid lighten($footer, 3%);
+        .payment-cards {
+            img {
+                height: 25px;
+            }
+        }
+    }
+}
+hr {
+    margin-top: 0;
+    margin-bottom: 0;
+    border: 0;
+    border-top: 1px solid #333744;
+}
+

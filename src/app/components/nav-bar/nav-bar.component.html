@@ -1,0 +1,77 @@
+<header id="topnav" class="defaultscroll sticky" [ngClass]="{'nav-sticky': scrolled,'bg-white': bgWhite}">
+    <div class="container">
+        <!-- Start Logo container-->
+         <ng-container *ngIf="navLight === 'true'; else elseTemplate">
+            <a class="logo" href="#home">
+                <span class="logo-light-mode">
+                    <img src="assets/images/cxc-systemLogo-sf.png" class="l-dark" height="45" alt="">
+                    <img src="assets/images/cxc-systemLogo-sf.png" class="l-light" height="45" alt="">
+                </span>
+            </a> 
+         </ng-container>
+         <ng-template #elseTemplate>
+             <a class="logo" href="#home">
+                 <img src="assets/images/cxc-systemLogo-sf.png" height="45" class="logo-light-mode" alt="">
+                 <img src="assets/images/cxc-systemLogo-sf.png" height="45" class="logo-dark-mode" alt="">
+             </a>                
+         </ng-template>         
+        <!-- End Logo container-->
+
+        <!-- Start toggle -->
+        <div class="menu-extras">
+            <div class="menu-item">
+                <!-- Mobile menu toggle-->
+                <a routerLink="#" class="navbar-toggle" [ngClass]="showToggleMenu ? 'open' : '' " id="isToggle" (click)="toggleMenu()">
+                    <div class="lines">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </a>
+                <!-- End mobile menu toggle-->
+            </div>
+        </div>  
+        <!-- End toggle -->
+
+        <!--start button-->
+        <div class="buy-button">
+            <a href="#home">
+                <span class="btn btn-primary d-md-inline-flex d-none" (click)="loginWithRedirect()">Login</span>            
+                <span class="btn btn-icon btn-primary d-inline-flex d-md-none" (click)="loginWithRedirect()"><i data-feather="log-in" class="fea icon-sm"></i></span>
+            </a>
+        </div>
+        <!--end button-->
+
+        <div id="navigation" [ngClass]="showToggleMenu ? 'd-block' : 'd-none' ">
+            <!-- Navigation Menu-->   
+            <ul class="navigation-menu nav-right" [ngClass]="navLight === 'true' ? 'nav-light' : ''">
+                <li [ngClass]="currentHash === '#home' ? 'active' : ''">
+                  <a href="#home" class="sub-menu-item">Home</a>
+                </li>
+              
+                <li [ngClass]="currentHash === '#software-features' ? 'active' : ''">
+                  <a href="#software-features">Servicios</a>
+                </li>
+              
+                <li [ngClass]="currentHash === '#pricing' ? 'active' : ''">
+                  <a href="#pricing">CTO</a>
+                </li>
+                <!--
+                <li class="has-submenu parent-menu-item" [ngClass]="['/blog-item','/blogs','/blogs-sidebar','/blog-standard-post','/blog-gallery-post','/blog-slider-post','/blog-link-post','/blog-story-post','/blog-youtube-post','/blog-html-video-post','/blog-audio-post','/blog-html-audio','/blog-blockquote-post','/blog-vimeo-post','/blog-left-sidebar-post'].includes(currentUrl) ? 'active' : '' ">
+                    <a routerLink="/blogs">Blog</a>
+                </li>
+                -->
+                <li [ngClass]="currentHash === '#contact' ? 'active' : ''">
+                  <a href="#contact" class="sub-menu-item">Contacto</a>
+                </li>
+                <!-- SOLO para móviles -->
+                <li class="d-md-none w-100 text-center mt-3">
+                <button class="btn btn-primary w-75" (click)="loginWithRedirect()">
+                    <i data-feather="log-in" class="fea icon-sm me-1"></i> Login
+                </button>
+                </li>
+              </ul>
+              
+        </div><!--end navigation-->
+    </div><!--end container-->
+</header><!--end header-->

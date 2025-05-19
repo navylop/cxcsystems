@@ -1,0 +1,89 @@
+/* Estilo base del sidebar */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  background-color: #1f2d3d;
+}
+
+/* Estilo colapsado */
+.sidebar.collapsed {
+  width: 70px;
+}
+
+/* Enlaces del menú */
+.sidebar .nav-link {
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  color: #00a884 !important; /* Verde navbar */
+  transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.3s ease;
+  position: relative;
+}
+
+/* Iconos dentro de los enlaces */
+.sidebar .nav-link i {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+  color: inherit !important;
+}
+
+/* Texto del enlace colapsado */
+.sidebar.collapsed .nav-link span {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: opacity 0.2s ease, width 0.2s ease;
+}
+
+.sidebar .nav-link span {
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+/* Hover y activo */
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background-color: #495057;
+  border-radius: 5px;
+  color: white !important;
+}
+
+/* Marcador visual izquierdo para el activo */
+.sidebar .nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 4px;
+  background-color: #00a884;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Contenedor del usuario */
+.user-toggle {
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+}
+
+/* Imagen del avatar */
+.user-toggle img {
+  transition: transform 0.3s ease;
+}
+
+/* Escalado en colapsado */
+.sidebar.collapsed .user-toggle img {
+  transform: scale(0.85);
+}
+
+/* Alinear texto o centrar imagen según estado */
+.user-toggle span {
+  color: white;
+  font-weight: 500;
+}
+
+/* Contenido principal */
+.content {
+  flex-grow: 1;
+}

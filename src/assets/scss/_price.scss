@@ -1,0 +1,48 @@
+//
+// price.scss
+//
+
+.pricing-plan {
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
+    .plan-detail {
+        .big-icon {
+            position: absolute;
+            top: 24px;
+            font-size: 100px;
+            right: -20px;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+    }
+    &:hover {
+        transform: translateY(-7px);
+        box-shadow: $shadow;
+        .plan-detail {
+            background: $gray-100;
+            .big-icon {
+                opacity: 0.04;
+                transform: rotate(-45deg);
+            }
+        }
+    }
+    .plan-detail, .plans {
+        .title {
+            font-size: 20px;
+        }
+    }
+    .rates {
+        a {
+            .icon {
+                transition: all 0.2s ease;
+            }
+        }
+        &:hover {
+            background: $gray-100;
+            a {
+                .icon {
+                    transform: translateX(10px);
+                }
+            }
+        }
+    }
+} 

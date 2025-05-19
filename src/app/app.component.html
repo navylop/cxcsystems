@@ -1,0 +1,11 @@
+<div *ngIf="auth.isAuthenticated$ | async; else notAuthenticated">
+  <!-- Si el usuario está autenticado, solo mostramos el sidebar -->
+  <app-sidebar></app-sidebar>
+</div>
+
+<ng-template #notAuthenticated>
+  <!-- Si el usuario NO está autenticado, mostramos la estructura normal -->
+  <app-nav-bar navLight="true"></app-nav-bar>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+</ng-template>

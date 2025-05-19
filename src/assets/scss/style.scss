@@ -1,0 +1,51 @@
+/* Template Name: Leaping - Creative Multipurpose Template
+   Author: Shreethemes-studio
+   E-mail: support@shreethemes.in
+   Version: 2.9.0
+   Created: May 2020
+   File Description: Main Css file of the template
+*/
+/*********************************/
+/*         INDEX                 */
+/*================================
+ *     01.  Variables            *
+ *     02.  Bootstrap Custom     *
+ *     03.  Components           *
+ *     04.  General              *
+ *     05.  Helper               *
+ *     06.  Menu                 *
+ *     07.  Home / Landing       *
+ *     08.  About                *
+ *     09.  Features             *
+ *     10.  Review / Testimonial *
+ *     11.  C.T.A                *
+ *     12.  Team                 *
+ *     13.  Price / Rates        *
+ *     14.  Work / Portfolio     *
+ *     15.  Blog / News          *
+ *     16.  Special Pages        *
+ *     17.  Contact              *
+ *     18.  Footer               *
+ ================================*/
+
+
+@import "variables";
+@import "bootstrap-custom";
+@import "components";
+@import "general";
+@import "helper";
+@import "menu";
+@import "home";
+@import "about";
+@import "features";
+@import "review";
+@import "cta";
+@import "team";
+@import "price";
+@import "work";
+@import "blog";
+@import "specialpages";
+@import "contact";
+@import "footer";
+@import "switcher";
+@import "masonary"

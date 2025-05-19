@@ -1,0 +1,66 @@
+<div class="d-flex">
+  <!-- Sidebar -->
+  <nav [ngClass]="{ 'sidebar': true, 'bg-dark': true, 'text-light': true, 'p-3': true, 'collapsed': isCollapsed }">
+
+    <!-- Usuario (avatar + nombre) -->
+    <div *ngIf="auth.user$ | async as user"
+         class="user-toggle d-flex mb-3"
+         [ngClass]="{
+           'justify-content-start align-items-center': !isCollapsed,
+           'justify-content-center': isCollapsed
+         }"
+         (click)="toggleSidebar()"
+         style="cursor: pointer">
+      <img alt="..." class="nav-user-profile rounded-circle" height="40" [src]="user.picture" />
+      <span *ngIf="!isCollapsed" class="ms-2">{{ user.name }}</span>
+    </div>
+
+    <!-- Menú lateral -->
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a routerLink="home"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }"
+           class="nav-link d-flex align-items-center text-green-custom">
+          <i class="bi bi-house-door me-2" style="color: inherit !important;"></i>
+          <span *ngIf="!isCollapsed">Inicio</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="external-api"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: false }"
+           class="nav-link d-flex align-items-center text-green-custom">
+          <i class="bi bi-calendar-event me-2" style="color: inherit !important;"></i>
+          <span *ngIf="!isCollapsed">Calendario</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="clientes"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: false }"
+           class="nav-link d-flex align-items-center text-green-custom">
+          <i class="bi bi-people me-2" style="color: inherit !important;"></i>
+          <span *ngIf="!isCollapsed">Clientes</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#"
+           class="nav-link d-flex align-items-center text-green-custom"
+           (click)="logout()">
+          <i class="bi bi-box-arrow-right me-2" style="color: inherit !important;"></i>
+          <span *ngIf="!isCollapsed">Logout</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="content flex-grow-1 p-3">
+    <div class="d-flex flex-column h-100">
+      <div class="container flex-grow-1 flex-shrink-1">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>

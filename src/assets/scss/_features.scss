@@ -1,0 +1,25 @@
+//
+// features.scss
+//
+.feature {
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
+    .border-icon {
+        font-size: 36px;
+        color: lighten($primary, 5%);
+    }
+    &:hover {
+        background: $white;
+        box-shadow: $shadow;
+        transform: translateY(-7px);
+        .border-icon {
+            color: $primary;
+        }
+    }
+}
+.feature, .features {
+    .content {
+        .title {
+            font-size: 18px;
+        }
+    }
+}

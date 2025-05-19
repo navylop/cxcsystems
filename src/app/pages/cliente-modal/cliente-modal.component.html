@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Nuevo Cliente</h2>
+
+<mat-dialog-content style="width: 100%;">
+  <form [formGroup]="clienteForm" style="display: flex; flex-direction: column; gap: 16px;">
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="telefono">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Dirección</mat-label>
+      <input matInput formControlName="direccion">
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions style="display: flex; justify-content: space-between;">
+  <button mat-button (click)="cerrarModal()">Cancelar</button>
+  <button mat-button color="primary" (click)="guardarCliente()" [disabled]="!clienteForm.valid">Guardar</button>
+</mat-dialog-actions>

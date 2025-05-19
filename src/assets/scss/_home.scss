@@ -1,0 +1,199 @@
+//
+// home.scss
+//
+
+@mixin home-common {
+    background-size: cover;
+    align-self: center;
+    position: relative;
+    background-position: center center;
+}
+.bg-home, .bg-special {
+    height: 100vh;    
+    @include home-common();
+}
+.bg-half-260 {
+    padding: 260px 0;    
+    @include home-common();
+}
+.bg-half-170 {
+    padding: 170px 0;    
+    @include home-common();
+}
+.bg-half {
+    padding: 144px 0 50px;
+    @include home-common();
+}
+//index_business.html
+.home-slider {
+    .carousel-control-next,
+    .carousel-control-prev {
+        width: 30px;
+        height: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 30px;
+        border: 1px solid $gray-400;
+    }
+    .carousel-control-next-icon,
+    .carousel-control-prev-icon {
+        width: 30%;
+    }
+}
+.swiper-button-next,
+.swiper-button-prev {
+        width: 30px;
+        height: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 30px;
+        border: 1px solid $gray-400;
+    }
+
+    .swiper-button-prev:after,
+    .swiper-button-next:after{
+        color:$gray-400 ;
+        font-size: 12px;
+    }
+
+
+//page-profile.html(Proflie)
+.bg-profile {
+    padding: 140px 0;
+    @include home-common();
+    .profile {
+        letter-spacing: 0.5px;
+        position: relative;
+        padding-left: 0;
+        top: 160px;
+        z-index: 99;
+        img {
+            max-height: 140px !important;
+        }
+    }
+}
+
+//Saas
+.home-dashboard {
+    img {
+        position: relative;
+        top: 60px;
+        z-index: 1;
+    }
+}
+//index_freelancer.html
+.bg-hero {
+    padding: 100px 0;
+    @include home-common();    
+}
+//index_application.html
+.home-img {
+    img {
+        max-height: 600px;
+        position: relative;
+    }
+}
+.home-shape {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    bottom: -1px;
+    left: 0;
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.bg-animation-left {
+    &:after {
+        content: "";
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 70%;
+        height: 100%;
+        background: $white none repeat scroll 0 0;
+        opacity: 0.85;
+        clip-path: polygon(0 0, 90% 0, 70% 100%, 0% 100%);
+    }
+}
+
+@media (min-width:768px) {
+    .home-dashboard {
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 768px) {
+    .bg-half {
+        padding: 169px 0 50px;
+    }
+}
+@media (max-width: 767px) {
+    .bg-home, .bg-half-170, .bg-half-260, .bg-hero {        
+        padding: 150px 0;
+        height: auto;
+    }
+    .bg-animation-left {
+        &:after {
+            width: 100%;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+    }
+}
+
+
+//Finance hero
+/* Kenburn Effect for Business Demo */
+.zoom-image {
+    position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.image-wrap {
+    position: absolute;
+    top: -200px;
+    bottom: -200px;
+    left: -100px;
+    right: -100px;
+    min-width: 100%;
+    width: auto;
+    min-height: 100%;
+    height: auto;
+    overflow: hidden;
+    margin: auto;
+    animation: 100s ppb_kenburns linear infinite alternate;
+}
+
+@keyframes move {
+    0% {
+        transform-origin: bottom;
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.4);
+    }
+}
+
+@keyframes ppb_kenburns {
+    0% {
+        transform: scale(1.3) translate(-10%, 10%);
+    }
+    25% {
+        transform: scale(1) translate(0, 0);
+    }
+    50% {
+        transform: scale(1.3) translate(10%, 10%);
+    }
+    75% {
+        transform: scale(1) translate(0, 0);
+    }
+    100% {
+        transform: scale(1.3) translate(-10%, 10%);
+    }
+}

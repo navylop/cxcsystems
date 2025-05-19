@@ -1,0 +1,27 @@
+//
+// helper.scss
+//
+
+.text-start {
+    text-align: right !important;
+}
+
+.text-end {
+    text-align: left !important;
+}
+
+.float-end {
+    float: left !important;
+}
+.float-start {
+    float: right !important;
+}
+dd {
+    margin-right: 0 !important;
+}
+
+@media (min-width: 768px){
+    .float-md-end {
+        float: left!important;
+    }
+}

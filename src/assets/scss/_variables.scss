@@ -1,0 +1,91 @@
+//
+// variables.scss
+//
+
+
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:400,600,700&display=swap');
+// Color
+$white:                     #ffffff;
+
+$primary:                   #6dc77a;
+$secondary:                 #838c97;
+$success:                   #23b456;
+$warning:                   #ec640f;
+$info:                      #24abc0;
+$danger:                    #dd2427;
+$dark:                      #35404e;
+$black:                     #273444;
+$muted:                     #8492a6;
+$light:                     #f7f8fa;
+
+// Gray
+$gray-100:                  #f8f9fa;
+$gray-200:                  #e9ecef;
+$gray-300:                  #dee2e6;
+$gray-400:                  #ced4da;
+$gray-500:                  #adb5bd;
+$gray-600:                  #6c757d;
+$gray-700:                  #495057;
+$gray-800:                  #343a40;
+$gray-900:                  #212529;
+
+
+// Overlay
+$overlay:                   rgba(35, 37, 47, 0.65);
+$bg-overlay-white:          rgba($black, 0.4);
+// Body Background
+$body-color:                #35404e;
+$footer:                    lighten($dark, 3%);
+// Base font
+$font-size-base:            16px;
+
+$font-family-base:          'Nunito Sans', sans-serif;
+$font-family-secondary:     'Nunito Sans', sans-serif;
+
+//Color switcher
+$default:                   #6dc77a;
+$red:                       #D52941;
+$skyblue:                   #32c2ec;
+$blue:                      #065fd4;
+$yellow:                    #f89d36;
+$light-green:               #06D6A0;
+
+//Shadow
+$shadow:                    0 0 3px rgba($dark, .2);
+$shadow-md:                 0 5px 13px rgba($dark, .2);
+$shadow-lg:                 0 10px 25px rgba($dark, .2);
+
+$colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "warning": $warning,
+    "info": $info,
+    "danger": $danger,
+    "dark": $dark,
+    "muted": $muted,
+    "light": $light,
+    "blue": $blue,
+    "red": $red,
+    "yellow": $yellow,
+    "skyblue": $skyblue,
+    "light-green": $light-green,
+    "footer": $footer,
+);
+
+$font-sizes: (
+    h1: 42px,
+    h2: 36px,
+    h3: 30px,
+    h4: 24px,
+    h5: 18px,
+    h6: 14px,
+    p: 16px,
+);
+
+$display-font-sizes: (
+    "display-1": 80px,
+    "display-2": 72px,
+    "display-3": 64px,
+    "display-4": 56px,
+)

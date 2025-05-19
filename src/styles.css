@@ -1,0 +1,30 @@
+/* You can add global styles to this file, and also import other style files */
+.img_tamano_logo {
+    width: 3rem; /* Ajusta este valor según el ancho deseado */
+    height: 3rem; /* Ajusta este valor según el alto deseado */
+    object-fit: contain; /* Mantiene proporciones dentro del área asignada */
+    display: block; /* Opcional: para quitar el espacio blanco alrededor */
+    margin: auto; /* Opcional: centra la imagen dentro de su contenedor */
+    /*border: 1px solid #ccc; /* Opcional: agrega un borde para ver los límites */
+    border-radius: 5px; /* Opcional: bordes redondeados */
+  }
+
+  .img_tamano_header {
+    width: 50rem; /* Ajusta este valor según el ancho deseado */
+    height: 50rem; /* Ajusta este valor según el alto deseado */
+    object-fit: contain; /* Mantiene proporciones dentro del área asignada */
+    display: block; /* Opcional: para quitar el espacio blanco alrededor */
+    margin: auto; /* Opcional: centra la imagen dentro de su contenedor */
+    /*border: 1px solid #ccc; /* Opcional: agrega un borde para ver los límites */
+    border-radius: 5px; /* Opcional: bordes redondeados */
+  }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body ngb-datepicker .btn-light {
+  background-color: #fff !important;
+  border-color: #dee2e6 !important;
+  color: #343a40 !important;
+  box-shadow: none !important;
+}
+

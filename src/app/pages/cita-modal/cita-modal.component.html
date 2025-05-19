@@ -1,0 +1,121 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Editar Cita' : 'Nueva Cita' }}</h2>
+
+<mat-dialog-content style="width: 100%; max-height: 70vh; overflow-y: auto;">
+  <form [formGroup]="citaForm" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+
+    <!-- Cliente -->
+    <ng-container *ngIf="isEditMode; else editableCliente">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Cliente</mat-label>
+        <input matInput [value]="citaForm.controls['nombre_cliente'].value" readonly>
+      </mat-form-field>
+    </ng-container>
+
+    <ng-template #editableCliente>
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Cliente</mat-label>
+        <input type="text"
+               matInput
+               [formControl]="citaForm.controls['nombre_cliente']"
+               [matAutocomplete]="auto"
+               (input)="filtrarClientes($event)"
+               (focus)="limpiarFiltro()">
+
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="seleccionarCliente($event)">
+          <ng-container *ngIf="mostrarAutocomplete">
+            <mat-option *ngFor="let cliente of clientesFiltrados" [value]="cliente.id_cliente">
+              {{ cliente.nombre }}
+            </mat-option>
+            <mat-option (click)="abrirModalNuevoCliente()" style="color: blue;">
+              + Crear Nuevo Cliente
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+
+        <mat-error *ngIf="citaForm.controls['nombre_cliente'].invalid && citaForm.controls['nombre_cliente'].touched">
+          El nombre del cliente es obligatorio.
+        </mat-error>
+      </mat-form-field>
+    </ng-template>
+
+    <!-- Fecha -->
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Fecha de Cita</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fecha_cita">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="citaForm.controls['fecha_cita'].invalid && citaForm.controls['fecha_cita'].touched">
+        Debes seleccionar una fecha.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Hora -->
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Hora de Cita</mat-label>
+      <input matInput type="time" formControlName="hora_cita">
+      <mat-error *ngIf="citaForm.controls['hora_cita'].invalid && citaForm.controls['hora_cita'].touched">
+        Debes introducir una hora válida.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Estado -->
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option value="Pendiente">Pendiente</mat-option>
+        <mat-option value="Confirmada">Confirmada</mat-option>
+        <mat-option value="Recibida">Recibida</mat-option>
+        <mat-option value="Cancelada">Cancelada</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Nota -->
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Nota</mat-label>
+      <textarea matInput formControlName="nota" rows="2"></textarea>
+    </mat-form-field>
+
+    <!-- Botón de notificación con icono y tooltip -->
+    <div class="row">
+      <div class="col-md-12 d-flex flex-column gap-2" *ngIf="infoBotonNotificacion.mostrar">
+        <button type="button"
+                class="btn btn-sm btn-big-text d-flex align-items-center gap-2"
+                [ngClass]="infoBotonNotificacion.clase"
+                [matTooltip]="infoBotonNotificacion.tooltip"
+                [disabled]="notificando"
+                (click)="accionNotificacion()">
+          <mat-icon>{{ infoBotonNotificacion.icon }}</mat-icon>
+          {{ infoBotonNotificacion.texto }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Fila final con Eliminar a la izquierda y Guardar/Cancelar a la derecha -->
+    <div class="row">
+      <!-- Eliminar -->
+      <div class="col-md-6 d-flex flex-column gap-2">
+        <button *ngIf="isEditMode"
+                type="button"
+                class="btn btn-outline-danger btn-sm btn-big-text"
+                (click)="confirmarAccion('eliminar')">
+          Eliminar
+        </button>
+      </div>
+
+      <!-- Guardar/Cancelar -->
+      <div class="col-md-6 d-flex justify-content-end align-items-start gap-2 mt-2 mt-md-0">
+        <button type="button"
+                class="btn btn-success btn-sm btn-big-text"
+                [disabled]="!citaForm.valid"
+                (click)="confirmarAccion('guardar')">
+          {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+        </button>
+        <button type="button"
+                class="btn btn-secondary btn-sm btn-big-text"
+                (click)="cerrarModal()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>

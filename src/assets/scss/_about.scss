@@ -1,0 +1,15 @@
+//
+// about.scss
+//
+.catagories, .cases, .branches {
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
+    .title {
+        &:hover {
+            color: $primary !important;
+        }
+    }
+    &:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 5px 9px rgba($dark, 0.15);
+    }
+}

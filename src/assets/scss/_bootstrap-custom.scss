@@ -1,0 +1,183 @@
+//
+// Bootstrap-custom.scss
+//
+@use 'sass:math';
+
+.container {
+    @media (min-width: 1400px) {
+        max-width: 1140px !important;
+    }
+}
+
+.row > * {
+    position: relative;
+}
+
+@each $heading,
+$size in $font-sizes {
+    #{$heading} {
+        font-size: $size;
+    }
+}
+
+@each $heading,
+$size in $display-font-sizes {
+    .#{$heading},
+    #{$heading} {
+        font-size: $size !important;
+    }
+}
+
+@each $name,
+$value in $colors {
+    .bg-#{$name} {
+        background-color: #{$value} !important;
+    }
+    .bg-soft-#{$name} {
+        background-color: rgba($value, 0.1) !important;
+        border: 1px solid rgba($value, 0.1) !important;
+        color: #{$value} !important;
+        .border {
+            border-color: $value !important;
+        }
+    }
+    .text-#{$name} {
+        color: #{$value} !important;
+    }
+    a {
+        &.text-#{$name} {
+            &:hover,
+            &:focus {
+                color: darken($value, 10%) !important;
+            }
+        }
+    }
+}
+
+.d-flex {
+    .flex-1 {
+        flex: 1;
+    }
+}
+
+//li (list inline item)
+.list-inline-item:not(:last-child) {
+    margin-right: 0px;
+    margin-bottom: 0px;
+} 
+// Rounded
+.rounded {
+    border-radius: 5px !important;
+}
+.rounded-top {
+    border-top-left-radius: 5px !important;
+    border-top-right-radius: 5px !important;
+}
+.rounded-left {
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+}
+.rounded-bottom {
+    border-bottom-left-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}
+.rounded-right {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}
+
+@media (max-width: 768px) {
+    .display-1 {
+        font-size: 56px !important;
+    }
+    .display-2 {
+        font-size: 50px !important;
+    }
+    .display-3 {
+        font-size: 42px !important;
+    }
+    .display-4 {
+        font-size: 36px !important;
+    }
+}
+//Small
+.small, small {
+    font-size: 90%;
+}
+
+// Opacity
+.opacity-05 {
+    opacity: 0.05;
+}
+
+.opacity-075 {
+    opacity: 0.075;
+}
+
+.opacity-1 {
+    opacity: 0.1;
+}
+
+.opacity-2 {
+    opacity: 0.2;
+}
+
+.opacity-3 {
+    opacity: 0.3;
+}
+
+.opacity-4 {
+    opacity: 0.4;
+}
+
+.opacity-5 {
+    opacity: 0.5;
+}
+
+.opacity-6 {
+    opacity: 0.6;
+}
+
+.opacity-7 {
+    opacity: 0.7;
+}
+
+.opacity-8 {
+    opacity: 0.8;
+}
+
+.opacity-9 {
+    opacity: 0.9;
+}
+
+code {
+    font-size: 1em !important;
+}
+
+//modal
+.modal {
+    .modal-dialog {
+        .modal-content {
+            background-color: $white !important;
+            .modal-header {
+                border-color: $gray-200 !important;
+                button {
+                    &.btn-close {
+                        background: none;
+                    }
+                }
+            }
+            button {
+                &.btn-close {
+                    background: none;
+                }
+            }
+            .modal-footer {
+                border-color: $gray-200 !important;
+            }
+        }
+        &.modal-sm {
+            max-width: 450px;
+        }
+    }
+}

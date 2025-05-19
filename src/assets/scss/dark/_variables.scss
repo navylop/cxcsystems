@@ -1,0 +1,68 @@
+//
+// variables.scss
+//
+
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:400,600,700&display=swap');
+// Color
+$white:                     #1f2d3d; //ffffff
+
+$primary:                   #6dc77a;
+$secondary:                 #838c97;
+$success:                   #23b456;
+$warning:                   #ec640f;
+$info:                      #24abc0;
+$danger:                    #dd2427;
+$dark:                      #ffffff; //3c4858
+$black:                     #161c2d;
+$muted:                     #9bacc4; //8492a6
+$light:                     #253649;
+$blue:                      #065fd4;
+
+// Gray
+$gray-900:                  #f8f9fa;
+$gray-800:                  #e9ecef;
+$gray-700:                  #dee2e6;
+$gray-600:                  #ced4da;
+$gray-500:                  #adb5bd;
+$gray-400:                  #6c757d;
+$gray-300:                  #495057;
+$gray-200:                  #2a3c51;
+$gray-100:                  #1f2d3d;
+
+// Overlay
+$overlay:                   rgba($white, 0.7);
+$gradident-overlay:         rgba($primary, 0.5);
+
+//Body Background
+$shadow:                    0 0 3px rgba($dark,.25);
+$shadow-lg:                 0 10px 25px rgba($dark, 0.15);
+$footer:                    lighten($white, 3%); //#1b2838;
+$bg-body:                   $white;
+
+// Base font
+$font-size-base:            16px;
+
+$font-family-base:          'Nunito Sans', sans-serif;
+$font-family-secondary:     'Nunito Sans', sans-serif;
+
+//Color Picker/Switcher
+$green:                     #6dc77a;
+$red:                       #ff5b69;
+$skyblue:                   #32c2ec;
+$skobleoff:                 #0f7173;
+$blue:                      #00c9a7;
+
+$colors: (
+    "white": $white,
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "warning": $warning,
+    "info": $info,
+    "danger": $danger,
+    "dark": $dark,
+    "muted": $muted,
+    "light": $light,
+    "blue": $blue,
+    "footer": $footer,
+);

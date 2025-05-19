@@ -1,0 +1,35 @@
+<section class="contact-section">
+    <div class="map-container">
+      <iframe
+        class="map"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2986.1738921476826!2d2.1002823157303476!3d41.54383199424439!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a494ff1101dde1%3A0x5e93c7a57e7109a8!2sCtra.%20de%20Terrassa%2C%2010%2C%2008201%20Sabadell%2C%20Barcelona!5e0!3m2!1ses!2ses!4v1611244668804!5m2!1ses!2ses"
+        allowfullscreen
+      ></iframe>
+      <div class="form-wrapper">
+        <h2>Contáctanos</h2>
+        <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input id="name" type="text" formControlName="name" placeholder="Nombre completo" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email" placeholder="Correo electrónico" />
+          </div>
+          <div class="form-group">
+            <label for="phone">Teléfono</label>
+            <input id="phone" type="tel" formControlName="phone" placeholder="Teléfono" />
+          </div>
+          <div class="form-group">
+            <label for="message">Mensaje</label>
+            <textarea id="message" formControlName="message" placeholder="Escribe tu mensaje aquí"></textarea>
+          </div>
+          <div class="captcha-group">
+            <re-captcha (resolved)="validaEnvio($event)" siteKey="6LfOND4aAAAAAJ3yrGntUTEPhU2MZeZUrl_V4O-p"></re-captcha>
+          </div>        
+          <button [disabled]="!messageForm.valid" type="submit">Enviar</button>
+        </form>
+      </div>
+    </div>
+  </section>
+  

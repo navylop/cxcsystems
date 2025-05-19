@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Calendario Reservas</h5>
+    </div>
+    <div class="card-body">
+
+      <!-- Spinner de carga -->
+      <div class="text-center my-3" *ngIf="cargando">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <!-- Calendario -->
+      <ng-container *ngIf="calendarVisible">
+        <full-calendar [options]="calendarOptions" class="border rounded p-2"></full-calendar>
+      </ng-container>
+
+    </div>
+  </div>
+</div>
+
+<!-- Toast de confirmación -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+  <div
+    class="toast align-items-center text-white bg-success border-0"
+    role="alert"
+    [class.show]="toastVisible"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="d-flex">
+      <div class="toast-body">
+        Citas actualizadas correctamente.
+      </div>
+      <button
+        type="button"
+        class="btn-close btn-close-white me-2 m-auto"
+        (click)="toastVisible = false"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+</div>

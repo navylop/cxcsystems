@@ -1,0 +1,266 @@
+<div *ngIf="auth.isAuthenticated$ | async; else notAuthenticated">
+    <div class="container mt-4">
+
+        <!-- Título con botón para abrir calendario -->
+        <div class="d-flex align-items-center mb-3">
+
+            <h4 class="mb-0 me-2">Citas: - {{ fechaHoy | date: 'fullDate' }}</h4>
+
+            <!-- Contenedor relativo para botón + input -->
+            <div class="position-relative">
+                <!-- Botón calendario -->
+                <button class="btn btn-outline-secondary btn-sm px-2 py-1" (click)="d.toggle()" type="button">
+                    <i class="bi bi-calendar"></i>
+                </button>
+                <!-- Input del datepicker (oculto visualmente pero presente en el DOM) -->
+                <input ngbDatepicker #d="ngbDatepicker" [(ngModel)]="fechaSeleccionada"
+                    (dateSelect)="onFechaSeleccionada($event)" placement="bottom-start" [style.position]="'absolute'"
+                    [style.left.px]="0" [style.top.px]="0" [style.opacity]="0" [style.width.px]="0"
+                    [style.height.px]="0" tabindex="-1" />
+            </div>
+        </div>
+
+        <!-- Tabla de Citas -->
+        <div *ngIf="citas.length > 0; else noCitas">
+            <table class="table table-hover table-sm align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Teléfono</th>
+                        <th>Hora</th>
+                        <th>Estado</th>
+                        <th>Nota</th>
+                        <th>.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cita of citas">
+                        <td>{{ cita.nombre_cliente }}</td>
+                        <td>{{ cita.telefono_cliente }}</td>
+                        <td>{{ cita.fecha_cita | date:'HH:mm' }}</td>
+                        <!--<td>{{ cita.estado }}</td>-->
+                        <td>
+                            <select class="form-select form-select-sm" [ngClass]="getEstadoColor(cita.estado)"
+                                [(ngModel)]="cita.estado" (change)="actualizarEstado(cita)">
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Confirmada">Confirmada</option>
+                                <option value="Recibida">Recibida</option>
+                                <option value="Cancelada">Cancelada</option>
+                            </select>
+                        </td>
+                        <td>{{ cita.nota }}</td>
+                        <td class="text-center">
+                        <button class="btn btn-outline-primary btn-sm"
+                                *ngIf="cita.estado === 'Confirmada' || cita.estado === 'Pendiente'"
+                                (click)="marcarComoRecibida(cita)"
+                                title="Marcar como Recibida">
+                            <i class="bi bi-envelope-check"></i>
+                        </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Plantilla en caso de no haber citas -->
+        <ng-template #noCitas>
+            <p class="text-muted">No hay citas para este día.</p>
+        </ng-template>
+
+    </div>
+</div>
+
+
+
+
+<ng-template #notAuthenticated>
+    <section class="bg-half-170 bg-light d-table w-100" data-jarallax='{"speed": 0.5}'
+        style="background:url('assets/images/software/software.jpg') center center" id="home">
+        <div class="bg-overlay bg-overlay-primary"></div>
+        <div id="home" class="container">
+            <div class="row align-items-center position-relative" style="z-index: 1;">
+                <div class="col-lg-7 col-md-6">
+                    <div class="title-heading text-center text-md-start mt-4">
+                        <h1 class="heading text-white title-dark mb-3">Soluciones de Automatización Empresarial para
+                            Potenciar tu Negocio</h1>
+                        <p class="para-desc text-light title-dark">Descubre cómo cxcSystems optimiza tus procesos
+                            empresariales con tecnología de automatización y mejora de productividad.</p>
+                        <div class="mt-4">
+                            <!--<a href="#" (click)="$event.preventDefault()" class="btn btn-light mouse-down"><i class="mdi mdi-download"></i> Install Now</a>-->
+                        </div>
+                    </div>
+                </div><!--end col-->
+
+                <div class="col-lg-5 col-md-6 mt-4 pt-2">
+                    <div class="home-img position-relative">
+                        <img [src]="['assets/images/app/90451.png']" class="img-fluid d-block mx-auto" alt="">
+                        <div class="play-icon">
+                            <a href="#" (click)="toggleModal($event)" class="play-btn lightbox video-play-icon">
+                                <i class="mdi mdi-play text-primary rounded-pill bg-dark shadow"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div><!--end col-->
+            </div><!--end row-->
+        </div><!--end container-->
+        <div class="home-shape d-block">
+            <img [src]="['assets/images/app/bg-shape.png']" alt="" class="img-fluid mx-auto d-block">
+        </div>
+    </section>
+
+    <section id="software-features" class="section pt-5">
+        <!-- Start Feature -->
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center">
+                    <div class="section-title mb-1 pb-2">
+                        <h4 class="title mb-4">Servicios Innovadores de Automatización Empresarial</h4>
+                        <p class="text-muted para-desc mx-auto mb-0">Amplía la productividad de tu empresa con nuestras
+                            soluciones integradas. Automatiza procesos y reduce costos operativos.</p>
+                    </div>
+                </div><!--end col-->
+            </div><!--end row-->
+
+            <div class="row">
+                <div *ngFor="let item of feature" class="col-lg-3 col-md-4 col-12 mt-2 pt-2">
+                    <div class="feature p-3 py-5 rounded text-center">
+                        <i class="h1 text-primary" [ngClass]="item.icon"></i>
+                        <div class="content">
+                            <h4 class="title mt-3">{{item.title}}</h4>
+                            <p class="text-muted mt-2 mb-0">{{item.desc}}</p>
+                        </div>
+                    </div>
+                </div><!--end col-->
+            </div><!--end row-->
+        </div><!--end container-->
+        <!-- End Feature -->
+
+        <!-- Start -->
+        <div class="container mt-50 mt-60">
+            <div class="row align-items-center">
+                <div class="col-lg-5 col-md-6">
+                    <img [src]="['assets/images/app/01.png']" class="img-fluid" alt="">
+                </div><!--end col-->
+
+                <div class="col-lg-7 col-md-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                    <div class="section-title ms-md-5">
+                        <h4 class="title mt-3 mb-4">Impulsa tu Negocio con cxcSystems</h4>
+                        <p class="text-muted para-desc">En cxcSystems ofrecemos una amplia gama de servicios de
+                            desarrollo de software de alta calidad, diseñados para satisfacer todas las necesidades de
+                            tu empresa y ayudarte a alcanzar tus objetivos empresariales.</p>
+                        <ul class="list-inline mb-0">
+                            <li class="h6"><i class="mdi mdi-check-circle-outline text-primary h5 mb-0 me-2"></i>
+                                Servicio de análisis, implementación y puesta en marcha de ERP empresarial.</li>
+                            <li class="h6"><i class="mdi mdi-check-circle-outline text-primary h5 mb-0 me-2"></i> Ayuda
+                                a potenciar el marketing online de la empresa asesorando sobre cómo utilizar los
+                                recursos ya disponibles.</li>
+                            <li class="h6"><i class="mdi mdi-check-circle-outline text-primary h5 mb-0 me-2"></i>
+                                Creación y mantenimiento de tiendas online y sincronización con ERP.</li>
+                            <li class="h6"><i class="mdi mdi-check-circle-outline text-primary h5 mb-0 me-2"></i>
+                                Desarrollo de Apps. Wep App, PWA, App hibridas y nativas.</li>
+                        </ul>
+                    </div>
+                </div><!--end col-->
+            </div><!--end row-->
+        </div><!--end container-->
+        <!-- End -->
+    </section>
+
+    <section id="pricing">
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="section-title mb-4 pb-2">
+                    <h4 class="title mb-4">Ofertas CTO</h4>
+                    <p class="text-muted para-desc mx-auto mb-0">Incorporar un CTO que coordine y trabaje codo con codo
+                        con el resto de los directivos y equipos verticales
+                        de la empresa para afrontar con éxito la transformación digital,obtenga todas las ventajas de
+                        tener un CTO de confianza en su empresa.</p>
+                </div>
+            </div><!--end col-->
+        </div><!--end row-->
+        <div class="container mt-50 mt-60 mb-5">
+            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+                <div class="col">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-header py-3">
+                            <h4 class="my-0 fw-normal">Basic</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">€150<small
+                                    class="text-body-secondary fw-light">/mes</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>10h de asesoramiento y consultoria</li>
+                                <li>Soporte Informático</li>
+                                <li>Transformacion digital</li>
+                                <li>Asistencia a reuniones estrategicas</li>
+                                <li><s>Control y supervisión de desarrollos</s></li>
+                                <li><s>IT recruiment</s></li>
+                                <li><s>Gestión de proyectos</s></li>
+                            </ul>
+                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-header py-3">
+                            <h4 class="my-0 fw-normal">Advance</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">€350<small
+                                    class="text-body-secondary fw-light">/mes</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>15h de asesoramiento y consultoria</li>
+                                <li>Soporte Informático</li>
+                                <li>Transformacion digital</li>
+                                <li>Asistencia a reuniones estrategicas</li>
+                                <li>Control y supervisión de desarrollos</li>
+                                <li>IT recruiment</li>
+                                <li><s>Gestión de proyectos</s></li>
+                            </ul>
+                            <button type="button" class="w-100 btn btn-lg btn-primary">Get started</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-4 rounded-3 shadow-sm border-primary">
+                        <div class="card-header py-3 text-bg-primary border-primary">
+                            <h4 class="my-0 fw-normal">Enterprise</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">€750<small
+                                    class="text-body-secondary fw-light">/mes</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>Total de asesoramiento y consultoria</li>
+                                <li>Soporte Informático</li>
+                                <li>Transformacion digital</li>
+                                <li>Asistencia a reuniones estrategicas</li>
+                                <li>Control y supervisión de desarrollos</li>
+                                <li>IT recruiment</li>
+                                <li>Gestión de proyectos</li>
+                            </ul>
+                            <button type="button" class="w-100 btn btn-lg btn-primary">Contact us</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <app-message-section />
+    </section>
+
+    <div class="modal" [ngClass]="isOpen ? 'd-block' : ''" style="background: #00000096;">
+        <div class="d-flex align-items-center justify-content-center h-100">
+            <div class="position-relative">
+                <div class="position-absolute top-0 translate-middle z-index-1" style="right:-30px">
+                    <button type="button" class="btn btn-icon btn-pills btn-sm btn-light btn-close opacity-10"
+                        (click)="toggleModal($event)"><i class="uil uil-times fs-4"></i></button>
+                </div>
+                <video #videoPlayer *ngIf="isOpen" src="./assets/video/05.mp4" controls autoplay
+                    class="rounded"></video>
+            </div>
+        </div>
+    </div>
+</ng-template>

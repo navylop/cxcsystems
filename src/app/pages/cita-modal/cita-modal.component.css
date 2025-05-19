@@ -1,0 +1,24 @@
+/* Asegurar que el modal sea responsive */
+mat-dialog-container {
+    width: 90vw;
+    max-width: 600px;
+  }
+  
+  /* Hacer que los inputs ocupen todo el ancho disponible */
+  mat-form-field {
+    width: 100%;
+  }
+  
+  /* Asegurar que el contenido sea scrollable si hay muchos campos */
+  mat-dialog-content {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  .btn-big-text {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1;
+    font-family: "Segoe UI", sans-serif;
+  }
+  
