@@ -3,21 +3,37 @@
 <mat-dialog-content style="width: 100%;">
   <form [formGroup]="clienteForm" style="display: flex; flex-direction: column; gap: 16px;">
     
+    <!-- Nombre -->
     <mat-form-field appearance="outline">
       <mat-label>Nombre</mat-label>
       <input matInput formControlName="nombre" #inputNombre />
+      <mat-error *ngIf="clienteForm.controls['nombre'].hasError('required')">
+        El nombre es obligatorio.
+      </mat-error>
     </mat-form-field>
 
+    <!-- Teléfono -->
     <mat-form-field appearance="outline">
       <mat-label>Teléfono</mat-label>
-      <input matInput formControlName="telefono">
+      <input matInput formControlName="telefono" required>
+      <mat-error *ngIf="clienteForm.controls['telefono'].hasError('required')">
+        El teléfono es obligatorio.
+      </mat-error>
+      <mat-error *ngIf="clienteForm.controls['telefono'].hasError('pattern')">
+        El teléfono debe tener entre 7 y 15 caracteres y solo puede contener números, espacios, +, - o paréntesis.
+      </mat-error>
     </mat-form-field>
 
+    <!-- Email -->
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
       <input matInput formControlName="email">
+      <mat-error *ngIf="clienteForm.controls['email'].hasError('email')">
+        Introduce un email válido.
+      </mat-error>
     </mat-form-field>
 
+    <!-- Dirección -->
     <mat-form-field appearance="outline">
       <mat-label>Dirección</mat-label>
       <input matInput formControlName="direccion">

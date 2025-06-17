@@ -57,6 +57,7 @@ export class CitaModalComponent implements OnInit {
   clientes: any[] = [];
   clientesFiltrados: any[] = [];
   nombreCliente = '';
+  telefonoCliente = '';
   mostrarAutocomplete = false;
   notificando = false;
   infoBoton = { mostrar: false, clase: '', texto: '', icon: '', tooltip: '', pill: '' };
@@ -158,12 +159,24 @@ export class CitaModalComponent implements OnInit {
     this.mostrarAutocomplete = valor.length > 0;
 
     this.clientesFiltrados = this.clientes.filter(cliente =>
-      cliente.nombre.toLowerCase().includes(valor)
+      cliente.nombre.toLowerCase().includes(valor) ||
+      cliente.telefono?.toLowerCase().includes(valor)
     );
   }
 
   onInputChange(event: any) {
-    this.nombreCliente = event.target.value;
+    const valor = event.target.value.trim();
+
+    // Validación flexible para número de teléfono
+    const esTelefono = /^[- +()0-9]{7,15}$/.test(valor);
+
+    if (esTelefono) {
+      this.telefonoCliente = valor;
+      this.nombreCliente = '';
+    } else {
+      this.nombreCliente = valor;
+      this.telefonoCliente = '';
+    }
   }
 
   seleccionarCliente(event: any) {
@@ -174,33 +187,31 @@ export class CitaModalComponent implements OnInit {
       this.citaForm.controls['nombre_cliente'].setValue(clienteSeleccionado.nombre);
     }
   }
-  /*
-  abrirModalNuevoCliente() {
-    const dialogRef = this.dialog.open(ClienteModalComponent, {
-      width: '500px',
-      data: { empresa: this.data.empresa }
-    });
 
-    dialogRef.afterClosed().subscribe(nuevoCliente => {
-      if (nuevoCliente) {
-        this.clientes.push(nuevoCliente);
-        this.clientesFiltrados = [...this.clientes];
-        this.citaForm.controls['id_cliente'].setValue(nuevoCliente.id_cliente);
-        this.citaForm.controls['nombre_cliente'].setValue(nuevoCliente.nombre);
-      }
-    });
-  }
-  */
   abrirModalNuevoCliente() {
     const nombreActual = this.nombreCliente;
+    const telefonoActual = this.telefonoCliente;
 
-    console.log(nombreActual);
+    // Expresión regular de teléfono válido en España
+    const telefonoValido = /^((\+34|0034)?[\s-]?)([6789]\d{2})[\s-]?(\d{3})[\s-]?(\d{3})$/;
+
+    // Si hay teléfono y no es válido, avisar y no continuar
+    if (telefonoActual && !telefonoValido.test(telefonoActual)) {
+      this.snackBar.open('El teléfono introducido no es válido en España.', 'Cerrar', {
+        duration: 4000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-error']
+      });
+      return;
+    }
 
     const dialogRef = this.dialog.open(ClienteModalComponent, {
       width: '500px',
       data: {
-        empresa: this.data.empresa,  
-        nombreInicial: nombreActual // <-- pasamos el nombre escrito
+        empresa: this.data.empresa,
+        nombreInicial: nombreActual,
+        telefonoInicial: telefonoActual
       }
     });
 

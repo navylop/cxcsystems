@@ -28,11 +28,11 @@ export class ClienteModalComponent implements AfterViewInit {
     private fb: FormBuilder,
     private apiService: ApiService,
     public dialogRef: MatDialogRef<ClienteModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: { empresa: string; nombreInicial?: string; telefonoInicial?: string }
   ) {
     this.clienteForm = this.fb.group({
       nombre: [data.nombreInicial || '', Validators.required],
-      telefono: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+      telefono: [data.telefonoInicial || '', [Validators.required, Validators.pattern(/^[- +()0-9]{7,15}$/)]],
       email: [''],
       direccion: [''],
       id_empresa: [data.empresa, Validators.required],

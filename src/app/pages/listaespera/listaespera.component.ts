@@ -37,6 +37,7 @@ export class ListaEsperaComponent implements OnInit {
   clientesFiltrados: any[] = [];
   mostrarAutocomplete = false;
   nombreCliente = '';
+  telefonoCliente = '';
 
   waitForm: FormGroup;
 
@@ -69,16 +70,26 @@ export class ListaEsperaComponent implements OnInit {
 
   filtrarClientes(event: any) {
     const valor = event.target.value.toLowerCase();
-    //this.nombreCliente = event.target.value;
     this.mostrarAutocomplete = valor.length > 0;
 
     this.clientesFiltrados = this.clientes.filter(cliente =>
-      cliente.nombre.toLowerCase().includes(valor)
+      cliente.nombre.toLowerCase().includes(valor) ||
+      cliente.telefono?.toLowerCase().includes(valor)
     );
   }
 
   onInputChange(event: any) {
-    this.nombreCliente = event.target.value;
+    const valor = event.target.value.trim();
+    // Verificamos si es teléfono (solo números, posiblemente con espacios o guiones)
+    const soloNumeros = /^[- +()0-9]{7,15}$/.test(valor);
+
+    if (soloNumeros) {
+      this.telefonoCliente = valor;
+      this.nombreCliente = '';
+    } else {
+      this.nombreCliente = valor;
+      this.telefonoCliente = '';
+    }
   }
 
   seleccionarCliente(event: any) {
@@ -98,12 +109,22 @@ export class ListaEsperaComponent implements OnInit {
 
   abrirModalNuevoCliente() {
     const nombreInicial = this.nombreCliente;
+    const telefonoInicial = this.telefonoCliente;
+
+    // Expresión regular para validar teléfonos españoles
+    const telefonoValido = /^((\+34|0034)?[\s-]?)([6789]\d{2})[\s-]?(\d{3})[\s-]?(\d{3})$/;
+
+    if (telefonoInicial && !telefonoValido.test(telefonoInicial)) {
+      alert('El teléfono introducido no es válido en España (debe comenzar por 6, 7, 8 o 9 y tener 9 dígitos).');
+      return;
+    }
 
     const dialogRef = this.dialog.open(ClienteModalComponent, {
       width: '500px',
       data: {
         empresa: this.empresa,
-        nombreInicial: nombreInicial
+        nombreInicial: nombreInicial,
+        telefonoInicial: telefonoInicial
       }
     });
 

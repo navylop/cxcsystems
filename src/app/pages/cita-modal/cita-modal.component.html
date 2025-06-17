@@ -37,7 +37,7 @@
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="seleccionarCliente($event)">
           <ng-container *ngIf="mostrarAutocomplete">
             <mat-option *ngFor="let cliente of clientesFiltrados" [value]="cliente.id_cliente">
-              {{ cliente.nombre }}
+              {{ cliente.nombre }} - {{ cliente.telefono }}
             </mat-option>
             <mat-option (click)="abrirModalNuevoCliente()" style="color: blue;">
               + Crear Nuevo Cliente
