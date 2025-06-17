@@ -1,0 +1,7 @@
+table th, table td {
+  vertical-align: middle;
+}
+
+.acciones-col {
+  white-space: nowrap;
+}

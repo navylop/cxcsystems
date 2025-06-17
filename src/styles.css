@@ -1,26 +1,52 @@
-/* You can add global styles to this file, and also import other style files */
+/* Estilos globales e importación */
 .img_tamano_logo {
-    width: 3rem; /* Ajusta este valor según el ancho deseado */
-    height: 3rem; /* Ajusta este valor según el alto deseado */
-    object-fit: contain; /* Mantiene proporciones dentro del área asignada */
-    display: block; /* Opcional: para quitar el espacio blanco alrededor */
-    margin: auto; /* Opcional: centra la imagen dentro de su contenedor */
-    /*border: 1px solid #ccc; /* Opcional: agrega un borde para ver los límites */
-    border-radius: 5px; /* Opcional: bordes redondeados */
-  }
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  display: block;
+  margin: auto;
+  border-radius: 5px;
+}
 
-  .img_tamano_header {
-    width: 50rem; /* Ajusta este valor según el ancho deseado */
-    height: 50rem; /* Ajusta este valor según el alto deseado */
-    object-fit: contain; /* Mantiene proporciones dentro del área asignada */
-    display: block; /* Opcional: para quitar el espacio blanco alrededor */
-    margin: auto; /* Opcional: centra la imagen dentro de su contenedor */
-    /*border: 1px solid #ccc; /* Opcional: agrega un borde para ver los límites */
-    border-radius: 5px; /* Opcional: bordes redondeados */
-  }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.img_tamano_header {
+  width: 50rem;
+  height: 50rem;
+  object-fit: contain;
+  display: block;
+  margin: auto;
+  border-radius: 5px;
+}
 
+/* Estilos globales del body/html para eliminar márgenes y padding */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* Ajuste para eliminar scroll lateral en móviles */
+main, app-root {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilos para prevenir espacios superiores */
+.container,
+.card,
+.card-body,
+.card-header,
+:host {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Personalización de datepicker Bootstrap (si aplica) */
 body ngb-datepicker .btn-light {
   background-color: #fff !important;
   border-color: #dee2e6 !important;
@@ -28,3 +54,14 @@ body ngb-datepicker .btn-light {
   box-shadow: none !important;
 }
 
+/* Eliminar borde redondeado superior del calendario */
+.card:first-child {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+/* Opcional: ajustar también la cabecera del calendario */
+.card-header {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}

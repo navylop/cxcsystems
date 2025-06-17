@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.card, .card-body, .card-header {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.fc-event-title {
+  white-space: normal !important;
+}

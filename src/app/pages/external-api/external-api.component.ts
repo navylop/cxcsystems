@@ -7,7 +7,13 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { CitaModalComponent } from '../cita-modal/cita-modal.component';
-import { Subscription, timer, switchMap } from 'rxjs';
+import { Subscription, timer, switchMap, forkJoin } from 'rxjs';
+
+import { ViewChild } from '@angular/core';
+import { FullCalendarComponent } from '@fullcalendar/angular';
+
+
+const VISTA_CALENDARIO_KEY = 'vistaCalendario';
 
 @Component({
   selector: 'app-external-api',
@@ -24,15 +30,18 @@ export class ExternalApiComponent implements OnDestroy {
   user: any;
   empresa: string | undefined;
   citas: any[] = [];
+  notas: any[] = [];
   calendarVisible = false;
   cargando = false;
   toastVisible = false;
+
+  @ViewChild('fullcalendar') calendarComponent!: FullCalendarComponent;
 
   private authSubscription: Subscription | undefined;
   private refreshSubscription: Subscription | undefined;
 
   calendarOptions = {
-    initialView: 'dayGridMonth',
+    initialView: localStorage.getItem(VISTA_CALENDARIO_KEY) || 'dayGridWeek',
     plugins: [dayGridPlugin, interactionPlugin],
     editable: true,
     selectable: true,
@@ -41,17 +50,84 @@ export class ExternalApiComponent implements OnDestroy {
       refrescar: {
         text: '↻',
         click: () => this.refrescarCitasManualmente()
+      },
+      vistaMes: {
+        text: 'Month',
+        click: () => this.setVistaCalendario('dayGridMonth')
+      },
+      vistaSemana: {
+        text: 'Week',
+        click: () => this.setVistaCalendario('dayGridWeek')
       }
     },
     headerToolbar: {
-      left: 'refrescar',
+      left: 'refrescar vistaMes,vistaSemana',
       center: 'title',
       right: 'today prev,next'
     },
     dateClick: this.handleDateClick.bind(this),
-    eventClick: this.handleEventClick.bind(this)
-  };
+    eventClick: this.handleEventClick.bind(this),
+    /*
+    eventContent: (arg: any) => {
+      const isNota = arg.event.extendedProps?.nota;
+      if (isNota) {
+        const notaTexto = arg.event.extendedProps.nota?.contenido || 'Nota';
+        const el = document.createElement('div');
+        el.innerHTML = `
+          <div style="color: black; background-color: orange; padding: 2px 4px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+            📝 ${notaTexto}
+          </div>`;
+        return { domNodes: [el] };
+      }
 
+      return {
+        html: `<div>${arg.event.title}</div>`
+      };
+    },
+    */
+    eventContent: (arg: any) => {
+      const isNota = arg.event.extendedProps?.nota;
+      if (isNota) {
+        const notaTexto = arg.event.extendedProps.nota?.contenido || 'Nota';
+        const el = document.createElement('div');
+
+        el.innerHTML = `
+          <div 
+            title="${notaTexto.replace(/"/g, '&quot;')}" 
+            style="
+              color: black;
+              background-color: orange;
+              padding: 2px 4px;
+              border-radius: 4px;
+              font-size: 12px;
+              font-weight: bold;
+              max-width: 100%;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            ">
+            📝 ${notaTexto}
+          </div>`;
+
+        return { domNodes: [el] };
+      }
+
+      return {
+        html: `<div>${arg.event.title}</div>`
+      };
+    },
+
+    eventOrder: (a, b) => {
+      const isNotaA = !!a.extendedProps?.nota;
+      const isNotaB = !!b.extendedProps?.nota;
+
+      if (isNotaA && !isNotaB) return -1;
+      if (!isNotaA && isNotaB) return 1;
+
+      return 0;
+    },
+
+  };
 
   constructor(
     public auth: AuthService,
@@ -71,15 +147,33 @@ export class ExternalApiComponent implements OnDestroy {
       }
     });
   }
+  /*
+  setVistaCalendario(vista: string) {
+    localStorage.setItem(VISTA_CALENDARIO_KEY, vista);    
+  }
+  */
+  setVistaCalendario(vista: string) {
+    localStorage.setItem(VISTA_CALENDARIO_KEY, vista);
+
+    // Cambiar la vista del calendario si está disponible
+    const calendarApi = this.calendarComponent?.getApi();
+    if (calendarApi) {
+      calendarApi.changeView(vista);
+    }
+  }
+
 
   iniciarRefrescoCitas() {
     this.refreshSubscription = timer(0, 3600000).pipe(
-      switchMap(() => this.apiService.getCitasPorEmpresa(this.empresa!))
+      switchMap(() => forkJoin([
+        this.apiService.getCitasPorEmpresa(this.empresa!),
+        this.apiService.getNotasPorEmpresa(this.empresa!)
+      ]))
     ).subscribe({
-      next: (data) => this.actualizarCitas(data),
+      next: ([citas, notas]) => this.actualizarEventosCalendario(citas, notas),
       error: (error) => {
         this.cargando = false;
-        console.error('Error al actualizar citas:', error);
+        console.error('Error al actualizar eventos:', error);
         this.calendarVisible = true;
       }
     });
@@ -93,10 +187,13 @@ export class ExternalApiComponent implements OnDestroy {
     if (!this.empresa) return;
 
     this.cargando = true;
-    this.apiService.getCitasPorEmpresa(this.empresa).subscribe({
-      next: (data) => {
+    forkJoin([
+      this.apiService.getCitasPorEmpresa(this.empresa),
+      this.apiService.getNotasPorEmpresa(this.empresa)
+    ]).subscribe({
+      next: ([citas, notas]) => {
         this.cargando = false;
-        this.actualizarCitas(data);
+        this.actualizarEventosCalendario(citas, notas);
 
         if (mostrarToast) {
           this.toastVisible = true;
@@ -105,15 +202,16 @@ export class ExternalApiComponent implements OnDestroy {
       },
       error: (error) => {
         this.cargando = false;
-        console.error('Error al cargar citas:', error);
+        console.error('Error al cargar eventos:', error);
       }
     });
   }
 
-  private actualizarCitas(data: any[]) {
-    this.citas = data || [];
+  private actualizarEventosCalendario(citas: any[], notas: any[]) {
+    this.citas = citas || [];
+    this.notas = notas || [];
 
-    this.calendarOptions.events = this.citas.map(cita => ({
+    const eventosCitas = this.citas.map(cita => ({
       title: `${cita.fecha_cita.split('T')[1].substring(0, 5)} - ${cita.nombre_cliente}`,
       date: cita.fecha_cita.split('T')[0],
       backgroundColor: this.getEventColor(cita.estado),
@@ -121,6 +219,18 @@ export class ExternalApiComponent implements OnDestroy {
       extendedProps: { cita }
     }));
 
+    const eventosNotas = this.notas.map(nota => ({
+      title: 'Nota',
+      date: nota.fecha.split('T')[0],
+      backgroundColor: 'transparent',
+      borderColor: 'transparent',
+      textColor: '#000',
+      allDay: true,
+      extendedProps: { nota }
+    }));  
+
+    //this.calendarOptions.events = [...eventosCitas, ...eventosNotas];
+    this.calendarOptions.events = [...eventosNotas, ...eventosCitas];
     this.calendarVisible = true;
   }
 
@@ -147,6 +257,8 @@ export class ExternalApiComponent implements OnDestroy {
   }
 
   handleEventClick(arg: any) {
+    if (arg.event.extendedProps?.nota) return; // No abrir modal si es nota
+
     const dialogRef = this.dialog.open(CitaModalComponent, {
       width: '90vw',
       maxWidth: '600px',

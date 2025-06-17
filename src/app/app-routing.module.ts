@@ -1,7 +1,6 @@
 import {
   Routes,
 } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ExternalApiComponent } from './pages/external-api/external-api.component';
 import { ErrorComponent } from './pages/error/error.component';
@@ -9,6 +8,8 @@ import { authGuardFn } from '@auth0/auth0-angular';
 import { HomeContentComponent } from './components/home-content/home-content.component';
 import { ClientesComponent } from './pages/clientes/clientes.component';
 import { ConfiguracionComponent } from './pages/configuracion/configuracion.component';
+import { NotasComponent } from './pages/notas/notas.component';
+import { ListaEsperaComponent } from './pages/listaespera/listaespera.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,16 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeContentComponent,
+    canActivate: [authGuardFn],
+  },
+  {
+    path: 'notas',
+    component: NotasComponent,
+    canActivate: [authGuardFn],
+  },
+  {
+    path: 'listaespera',
+    component: ListaEsperaComponent,
     canActivate: [authGuardFn],
   },
   {

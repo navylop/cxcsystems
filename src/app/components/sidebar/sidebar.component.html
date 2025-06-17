@@ -36,6 +36,23 @@
         </a>
       </li>
       <li class="nav-item">
+        <a routerLink="notas"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: false }"
+           class="nav-link d-flex align-items-center text-green-custom">
+          <i class="bi bi-people me-2" style="color: inherit !important;"></i>
+          <span *ngIf="!isCollapsed">Notas</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="listaespera"
+          routerLinkActive="active"
+          class="nav-link d-flex align-items-center text-green-custom">
+          <i class="bi bi-hourglass-split me-2"></i>
+          <span *ngIf="!isCollapsed">Lista Espera</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a routerLink="clientes"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{ exact: false }"

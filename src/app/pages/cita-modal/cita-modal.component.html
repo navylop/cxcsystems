@@ -1,4 +1,17 @@
-<h2 mat-dialog-title>{{ isEditMode ? 'Editar Cita' : 'Nueva Cita' }}</h2>
+<div class="row">
+  <div class="col-9"><h2 mat-dialog-title>{{ isEditMode ? 'Editar Cita' : 'Nueva Cita' }}</h2></div>
+  <div class="col-3 mt-4">
+    <span *ngIf="infoBoton.pill"
+          class="badge rounded-pill text-capitalize"
+          [ngClass]="{
+            'bg-success': infoBoton.pill.toLowerCase().includes('enviada'),
+            'bg-info': infoBoton.pill.toLowerCase().includes('pendiente')
+          }">
+      {{ infoBoton.pill }}
+    </span>
+  </div>
+</div>
+
 
 <mat-dialog-content style="width: 100%; max-height: 70vh; overflow-y: auto;">
   <form [formGroup]="citaForm" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
@@ -18,7 +31,7 @@
                matInput
                [formControl]="citaForm.controls['nombre_cliente']"
                [matAutocomplete]="auto"
-               (input)="filtrarClientes($event)"
+               (input)="filtrarClientes($event); onInputChange($event)"
                (focus)="limpiarFiltro()">
 
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="seleccionarCliente($event)">
@@ -77,15 +90,15 @@
 
     <!-- Botón de notificación con icono y tooltip -->
     <div class="row">
-      <div class="col-md-12 d-flex flex-column gap-2" *ngIf="infoBotonNotificacion.mostrar">
+      <div class="col-md-12 d-flex flex-column gap-2" *ngIf="infoBoton.mostrar">
         <button type="button"
                 class="btn btn-sm btn-big-text d-flex align-items-center gap-2"
-                [ngClass]="infoBotonNotificacion.clase"
-                [matTooltip]="infoBotonNotificacion.tooltip"
+                [ngClass]="infoBoton.clase"
+                [matTooltip]="infoBoton.tooltip"
                 [disabled]="notificando"
                 (click)="accionNotificacion()">
-          <mat-icon>{{ infoBotonNotificacion.icon }}</mat-icon>
-          {{ infoBotonNotificacion.texto }}
+          <mat-icon>{{ infoBoton.icon }}</mat-icon>
+          {{ infoBoton.texto }}
         </button>
       </div>
     </div>

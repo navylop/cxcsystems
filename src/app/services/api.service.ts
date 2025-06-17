@@ -88,6 +88,9 @@ export class ApiService {
     return this.http.get(`${API_URL}/Notificaciones/${id_notificacion}/${id_cita}/${id_cliente}/${id_empresa}`);
   }
 
+  getNotificacionesPorCita(id_cita: number, id_cliente: number, id_empresa: string): Observable<any> {
+    return this.http.get(`${API_URL}/Notificaciones/Cita/${id_cita}/${id_cliente}/${id_empresa}`);
+  }
   
   getNotificacionesPorEmpresa(id_empresa: string): Observable<any> {
     return this.http.get(`${API_URL}/Notificaciones/Empresa/${id_empresa}`);
@@ -115,5 +118,44 @@ export class ApiService {
     return this.http.get<any>(`${API_URL}/Clientes/PorTelefono/${id_empresa}/${telefono}`);
   }
 
-  
+  // Notas
+  /*
+  getNotasPorEmpresa(id_empresa: string): Observable<any[]> {
+    return this.http.get<any[]>(`${API_URL}/Notas/${id_empresa}`);
+  }*/
+  getNotasPorEmpresa(id_empresa: string): Observable<any[]> {
+    return this.http.get<any[]>(`${API_URL}/Notas/Empresa/${id_empresa}`);
+  }
+
+
+  getNota(id_nota: number): Observable<any> {
+    return this.http.get<any>(`${API_URL}/Notas/detalle/${id_nota}`);
+  }
+
+  createNota(nota: any): Observable<any> {
+    return this.http.post<any>(`${API_URL}/Notas`, nota);
+  }
+
+  updateNota(nota: any): Observable<any> {
+    return this.http.put<any>(`${API_URL}/Notas/${nota.id_nota}`, nota);
+  }
+
+  deleteNota(id_nota: number): Observable<any> {
+    return this.http.delete<any>(`${API_URL}/Notas/${id_nota}`);
+  }
+
+  // LISTA DE ESPERA
+
+  getListaEsperaPorEmpresa(id_empresa: string): Observable<any[]> {
+    return this.http.get<any[]>(`${API_URL}/ListaEspera/Empresa/${id_empresa}`);
+  }
+
+  createListaEspera(item: any): Observable<any> {
+    return this.http.post<any>(`${API_URL}/ListaEspera`, item);
+  }
+
+  deleteListaEspera(id_lista: number): Observable<any> {
+    return this.http.delete(`${API_URL}/ListaEspera/${id_lista}`);
+  }
+
 }

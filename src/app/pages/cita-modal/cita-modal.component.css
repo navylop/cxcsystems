@@ -22,3 +22,39 @@ mat-dialog-container {
     font-family: "Segoe UI", sans-serif;
   }
   
+  .dialog-header {
+  padding: 0.75rem 1rem;
+  text-align: left !important;
+}
+
+.dialog-title-text {
+  text-align: left !important;
+  width: auto;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+mat-dialog-container {
+  overflow-x: hidden !important;
+}
+
+mat-dialog-content {
+  overflow-x: hidden !important;
+}
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.col-9, .col-3, .col-md-6, .col-md-12 {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box;
+}
+button {
+  max-width: 100%;
+  white-space: nowrap;
+}
+.mat-form-field, input, textarea {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}

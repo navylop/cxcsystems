@@ -136,8 +136,32 @@ export class ClientesComponent implements OnInit {
     this.totalPaginas = Math.ceil(this.clientesFiltrados.length / this.elementosPorPagina);
   }
 
+  /*
   get totalPaginasArray(): number[] {
     return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+  }
+  */
+  get totalPaginasArray(): number[] {
+    const maxVisible = 5;
+    const total = this.totalPaginas;
+
+    if (total <= maxVisible) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    const half = Math.floor(maxVisible / 2);
+    let start = this.paginaActual - half;
+    let end = this.paginaActual + half;
+
+    if (start < 1) {
+      start = 1;
+      end = maxVisible;
+    } else if (end > total) {
+      end = total;
+      start = total - maxVisible + 1;
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
   resetFormulario(form?: any): void {

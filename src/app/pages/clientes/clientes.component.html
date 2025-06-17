@@ -126,15 +126,33 @@
   <!-- Paginación -->
   <nav>
     <ul class="pagination justify-content-center">
+
+      <!-- Primero -->
       <li class="page-item" [class.disabled]="paginaActual === 1">
-        <button class="page-link" (click)="cambiarPagina(paginaActual - 1)">Anterior</button>
+        <button class="page-link" (click)="cambiarPagina(1)">«</button>
       </li>
+
+      <!-- Anterior -->
+      <li class="page-item" [class.disabled]="paginaActual === 1">
+        <button class="page-link" (click)="cambiarPagina(paginaActual - 1)">‹</button>
+      </li>
+
+      <!-- Páginas visibles -->
       <li class="page-item" *ngFor="let page of totalPaginasArray" [class.active]="page === paginaActual">
         <button class="page-link" (click)="cambiarPagina(page)">{{ page }}</button>
       </li>
+
+      <!-- Siguiente -->
       <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
-        <button class="page-link" (click)="cambiarPagina(paginaActual + 1)">Siguiente</button>
+        <button class="page-link" (click)="cambiarPagina(paginaActual + 1)">›</button>
       </li>
+
+      <!-- Último -->
+      <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+        <button class="page-link" (click)="cambiarPagina(totalPaginas)">»</button>
+      </li>
+
     </ul>
   </nav>
+
 </div>

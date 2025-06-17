@@ -7,7 +7,10 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { LOCALE_ID } from '@angular/core';
+import { LOCALE_ID, importProvidersFrom } from '@angular/core';
+
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import '@angular/localize/init';
 
@@ -37,7 +40,9 @@ bootstrapApplication(AppComponent, {
       },
     },
     provideAnimations(),
-    // 👉 Configurar LOCALE_ID en español
+    importProvidersFrom(
+      CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
+    ),
     { provide: LOCALE_ID, useValue: 'es' },
   ],
 });

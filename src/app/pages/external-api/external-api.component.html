@@ -14,7 +14,8 @@
 
       <!-- Calendario -->
       <ng-container *ngIf="calendarVisible">
-        <full-calendar [options]="calendarOptions" class="border rounded p-2"></full-calendar>
+        <!-- <full-calendar [options]="calendarOptions" class="border rounded p-2"></full-calendar>-->
+        <full-calendar #fullcalendar [options]="calendarOptions" class="border rounded p-2"></full-calendar>
       </ng-container>
 
     </div>

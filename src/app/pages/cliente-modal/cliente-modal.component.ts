@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,8 +19,10 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule
   ]
 })
-export class ClienteModalComponent {
+export class ClienteModalComponent implements AfterViewInit {
   clienteForm: FormGroup;
+
+  @ViewChild('inputNombre', { static: false }) inputNombreRef!: ElementRef;
 
   constructor(
     private fb: FormBuilder,
@@ -29,11 +31,21 @@ export class ClienteModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.clienteForm = this.fb.group({
-      nombre: ['', Validators.required],
+      nombre: [data.nombreInicial || '', Validators.required],
       telefono: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       email: [''],
       direccion: [''],
-      id_empresa: [data.empresa, Validators.required]
+      id_empresa: [data.empresa, Validators.required],
+      fecha_creacion: [new Date().toISOString()]
+    });
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (this.inputNombreRef?.nativeElement) {
+        this.inputNombreRef.nativeElement.focus();
+        this.inputNombreRef.nativeElement.select();
+      }
     });
   }
 

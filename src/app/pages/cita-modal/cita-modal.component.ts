@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,8 +14,6 @@ import { FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
-
-
 import { ClienteModalComponent } from '../cliente-modal/cliente-modal.component';
 
 export const MY_DATE_FORMATS = {
@@ -53,7 +51,7 @@ export const MY_DATE_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
   ]
 })
-export class CitaModalComponent {
+export class CitaModalComponent implements OnInit {
   citaForm: FormGroup;
   isEditMode = false;
   clientes: any[] = [];
@@ -61,6 +59,10 @@ export class CitaModalComponent {
   nombreCliente = '';
   mostrarAutocomplete = false;
   notificando = false;
+  infoBoton = { mostrar: false, clase: '', texto: '', icon: '', tooltip: '', pill: '' };
+  notificacionEnviada = false;
+  tipoNotificacion: string = 'Sms'; // valor por defecto
+
 
   constructor(
     private fb: FormBuilder,
@@ -70,7 +72,9 @@ export class CitaModalComponent {
     public dialogRef: MatDialogRef<CitaModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.isEditMode = !!data.cita;
+    //this.isEditMode = !!data.cita;
+    this.isEditMode = !!data.cita && data.cita.id_cita > 0;
+
     this.citaForm = this.fb.group({
       id_cita: [data.cita?.id_cita || 0],
       id_cliente: [data.cita?.id_cliente || '', Validators.required],
@@ -82,8 +86,55 @@ export class CitaModalComponent {
       nota: [data.cita?.nota || ''],
       fecha_creacion: [data.cita?.fecha_creacion || new Date().toISOString()]
     });
+  }
 
+  ngOnInit(): void {
     this.cargarClientes();
+
+    // Subscriptions per recalcular botó si canvien valors
+    this.citaForm.get('estado')?.valueChanges.subscribe(() => {
+      this.actualizarInfoBoton();
+    });
+
+    this.citaForm.get('fecha_cita')?.valueChanges.subscribe(() => {
+      this.actualizarInfoBoton();
+    });
+
+    if (this.isEditMode) {
+      const { id_cita, id_cliente, id_empresa } = this.citaForm.value;
+
+      // 1. Obtener tipo de notificación del cliente
+      this.apiService.getCliente(id_cliente, id_empresa).subscribe({
+        next: (cliente) => {
+          this.tipoNotificacion = this.mapearTipoNotificacion(cliente?.tipo_notificacion);
+          this.actualizarInfoBoton(); // Llamamos tras obtener tipo
+        },
+        error: (err) => {
+          console.error('Error al obtener tipo de notificación:', err);
+          this.tipoNotificacion = 'Notificación';
+          this.actualizarInfoBoton();
+        }
+      });
+
+      // 2. Consultar si ya se ha enviado notificación
+      this.apiService.getNotificacionesPorCita(id_cita, id_cliente, id_empresa).subscribe({
+        next: (notificaciones: any[]) => {
+          this.notificacionEnviada = notificaciones?.length > 0;
+          this.actualizarInfoBoton(); // Llamamos también tras obtener el estado
+        },
+        error: (error) => {
+          console.error('Error al consultar notificaciones:', error);
+          this.notificacionEnviada = false;
+          this.actualizarInfoBoton();
+        }
+      });
+
+    } else {
+      // No edición: inicializa estado como pendiente
+      this.notificacionEnviada = false;
+      this.tipoNotificacion = 'Notificación';
+      this.actualizarInfoBoton();
+    }
   }
 
   cargarClientes() {
@@ -103,12 +154,16 @@ export class CitaModalComponent {
   filtrarClientes(event: any) {
     if (this.isEditMode) return;
     const valor = event.target.value.toLowerCase();
-    this.nombreCliente = event.target.value;
+    //this.nombreCliente = event.target.value;
     this.mostrarAutocomplete = valor.length > 0;
 
     this.clientesFiltrados = this.clientes.filter(cliente =>
       cliente.nombre.toLowerCase().includes(valor)
     );
+  }
+
+  onInputChange(event: any) {
+    this.nombreCliente = event.target.value;
   }
 
   seleccionarCliente(event: any) {
@@ -119,11 +174,34 @@ export class CitaModalComponent {
       this.citaForm.controls['nombre_cliente'].setValue(clienteSeleccionado.nombre);
     }
   }
-
+  /*
   abrirModalNuevoCliente() {
     const dialogRef = this.dialog.open(ClienteModalComponent, {
       width: '500px',
       data: { empresa: this.data.empresa }
+    });
+
+    dialogRef.afterClosed().subscribe(nuevoCliente => {
+      if (nuevoCliente) {
+        this.clientes.push(nuevoCliente);
+        this.clientesFiltrados = [...this.clientes];
+        this.citaForm.controls['id_cliente'].setValue(nuevoCliente.id_cliente);
+        this.citaForm.controls['nombre_cliente'].setValue(nuevoCliente.nombre);
+      }
+    });
+  }
+  */
+  abrirModalNuevoCliente() {
+    const nombreActual = this.nombreCliente;
+
+    console.log(nombreActual);
+
+    const dialogRef = this.dialog.open(ClienteModalComponent, {
+      width: '500px',
+      data: {
+        empresa: this.data.empresa,  
+        nombreInicial: nombreActual // <-- pasamos el nombre escrito
+      }
     });
 
     dialogRef.afterClosed().subscribe(nuevoCliente => {
@@ -203,7 +281,7 @@ export class CitaModalComponent {
             });
           }
         });
-      } else {        
+      } else {
         this.apiService.createCita(citaData).subscribe({
           next: () => {
             this.snackBar.open('Cita creada correctamente', 'Cerrar', {
@@ -276,12 +354,16 @@ export class CitaModalComponent {
       this.snackBar.open('Notificación enviada correctamente', 'Cerrar', { duration: 3000 });
       this.notificando = false;
     });
+    this.notificacionEnviada = true;
+    this.actualizarInfoBoton();
   }
 
   accionNotificacion() {
     this.notificando = true;
     this.confirmarAccion('notificar');
     setTimeout(() => this.notificando = false, 3000);
+    this.notificacionEnviada = true;
+    this.actualizarInfoBoton();
   }
 
   confirmarAccion(tipo: 'guardar' | 'eliminar' | 'notificar') {
@@ -297,33 +379,22 @@ export class CitaModalComponent {
         mensaje = '¿Deseas enviar la notificación al cliente?';
         break;
     }
-  
+
     if (confirm(mensaje)) {
       if (tipo === 'guardar') {
         this.guardarCita();
       } else if (tipo === 'eliminar') {
         this.eliminarCita();
-        this.snackBar.open('Cita eliminada correctamente', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['snackbar-success']
-        });
       } else if (tipo === 'notificar') {
         this.enviarNotificacion();
-        this.snackBar.open('Notificación enviada correctamente', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['snackbar-success']
-        });
       }
     }
-  }  
+  }
 
-  get infoBotonNotificacion() {
+  actualizarInfoBoton() {
     if (!this.isEditMode || !this.citaForm?.value?.fecha_cita) {
-      return { mostrar: false, clase: '', texto: '', icon: '', tooltip: '' };
+      this.infoBoton = { mostrar: false, clase: '', texto: '', icon: '', tooltip: '', pill: '' };
+      return;
     }
 
     const fechaCita = new Date(this.citaForm.value.fecha_cita);
@@ -331,29 +402,35 @@ export class CitaModalComponent {
     fechaCita.setHours(0, 0, 0, 0);
     hoy.setHours(0, 0, 0, 0);
 
-    const estado = this.citaForm.value.estado;
+    const tipo = this.tipoNotificacion || 'Notificación';
+    const estado = this.notificacionEnviada ? 'Enviada' : 'Pendiente';
 
-    if (fechaCita < hoy || this.esEstadoInactivo(estado)) {
-      return { mostrar: false, clase: '', texto: '', icon: '', tooltip: '' };
-    }
+    // Siempre establecer el pill para mostrar el badge
+    const pill = `${tipo} ${estado}`;
 
-    if (estado === 'Confirmada') {
-      return {
-        mostrar: true,
-        clase: 'btn-success',
-        texto: 'Reenviar Confirmación',
-        icon: 'check_circle',
-        tooltip: 'Haz clic para reenviar la confirmación al cliente'
-      };
-    }
+    // Solo mostrar el botón si la fecha es futura y el estado es "Pendiente"
+    const estadoCita = this.citaForm.value.estado;
+    const mostrarBoton = fechaCita >= hoy && estadoCita === 'Pendiente';
 
-    return {
-      mostrar: true,
-      clase: 'btn-info',
-      texto: 'Enviar Notificación',
-      icon: 'send',
-      tooltip: 'Haz clic para notificar al cliente'
+    this.infoBoton = {
+      mostrar: mostrarBoton,
+      clase: this.notificacionEnviada ? 'btn-success' : 'btn-info',
+      texto: this.notificacionEnviada ? 'Reenviar Notificación' : 'Enviar Notificación',
+      icon: this.notificacionEnviada ? 'check_circle' : 'send',
+      tooltip: this.notificacionEnviada
+        ? 'Ya se envió una notificación a este cliente.'
+        : 'Haz clic para enviar una notificación al cliente.',
+      pill: pill
     };
+  }
+
+  mapearTipoNotificacion(valor: number | string): string {
+    switch (+valor) {
+      case 1: return 'Email';
+      case 2: return 'WhatsApp';
+      case 3: return 'SMS';
+      default: return 'Notificación';
+    }
   }
 
   esEstadoInactivo(estado: string): boolean {

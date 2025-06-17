@@ -1,0 +1,72 @@
+<div class="container mt-4">
+  <h2 class="mb-3">{{ editando ? 'Editar Nota' : 'Nueva Nota' }}</h2>
+
+  <form (ngSubmit)="guardarNota()" #notaFormRef="ngForm">
+    <div class="row">
+      <div class="col-2">
+        <div class="mb-3">
+          <label for="fecha" class="form-label">Fecha</label>
+          <input
+            type="date"
+            class="form-control"
+            id="fecha"
+            name="fecha"
+            [(ngModel)]="notaForm.fecha"
+            required />
+        </div>
+
+        <!-- Botones en columna -->
+        <div class="d-flex flex-column gap-2">
+          <button type="submit" class="btn btn-primary w-100">
+            {{ editando ? 'Actualizar' : 'Guardar' }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary w-100"
+            (click)="cancelarEdicion()"
+            *ngIf="editando">
+            Cancelar
+          </button>
+        </div>
+      </div>
+
+      <div class="col-8">
+        <div class="mb-3">
+          <label for="contenido" class="form-label">Nota</label>
+          <textarea
+            class="form-control"
+            id="contenido"
+            name="contenido"
+            [(ngModel)]="notaForm.contenido"
+            required
+            rows="3">
+          </textarea>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <hr class="my-4" />
+
+  <h3>Notas Registradas</h3>
+  <div *ngIf="notas.length === 0">No hay notas registradas.</div>
+
+  <ul class="list-group mt-3">
+    <li class="list-group-item" *ngFor="let nota of notas">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ nota.fecha | date: 'dd/MM/yyyy' }}</strong><br />
+          {{ nota.contenido }}
+        </div>
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-outline-secondary" (click)="editarNota(nota)">
+            Editar
+          </button>
+          <button class="btn btn-outline-danger" (click)="eliminarNota(nota.id_nota)">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
