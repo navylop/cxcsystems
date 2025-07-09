@@ -10,6 +10,7 @@ import { ClientesComponent } from './pages/clientes/clientes.component';
 import { ConfiguracionComponent } from './pages/configuracion/configuracion.component';
 import { NotasComponent } from './pages/notas/notas.component';
 import { ListaEsperaComponent } from './pages/listaespera/listaespera.component';
+import { PublicidadCitasComponent } from './components/publicidad-citas/publicidad-citas.component';
 
 export const routes: Routes = [
   {
@@ -46,6 +47,11 @@ export const routes: Routes = [
     path: 'listaespera',
     component: ListaEsperaComponent,
     canActivate: [authGuardFn],
+  },
+  ,
+  {
+    path: 'publicidad-citas',
+    component: PublicidadCitasComponent,
   },
   {
     path: 'error',

@@ -25,6 +25,10 @@ export class ApiService {
     return this.http.get(`${API_URL}/Citas/Empresa/${id_empresa}`);
   } 
 
+  getCitasPorCliente(id_empresa: string, id_cliente: number): Observable<any[]> {
+    return this.http.get<any[]>(`${API_URL}/Clientes/${id_empresa}/${id_cliente}/citas`);
+  }
+
   createCita(cita: any): Observable<any> {
     return this.http.post(`${API_URL}/Citas`, cita);
   }

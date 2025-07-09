@@ -1,0 +1,36 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.wrapper {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+}
+
+.main-panel {
+  min-width: 0;
+}
+
+app-nav-bar {
+  height: 60px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.content {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+app-footer {
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 0.5rem;
+  border-top: 1px solid #ccc;
+}

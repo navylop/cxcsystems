@@ -1,10 +1,32 @@
-<div *ngIf="auth.isAuthenticated$ | async; else notAuthenticated">
-  <!-- Si el usuario está autenticado, solo mostramos el sidebar -->
-  <app-sidebar></app-sidebar>
-</div>
+<!-- Spinner mientras carga la aplicación -->
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
 
+<!-- Contenido principal si no estamos cargando -->
+<ng-container *ngIf="!loading">
+  <!-- Si el usuario está autenticado -->
+  <ng-container *ngIf="auth.isAuthenticated$ | async; else notAuthenticated">
+
+    <!-- Dashboard layout con sidebar + main -->
+    <div class="wrapper d-flex">
+      <!-- Sidebar -->
+      <div class="sidebar bg-dark text-light">
+        <app-sidebar></app-sidebar>
+      </div>
+
+      <!-- Main Panel -->
+      <div class="main-panel flex-grow-1 d-flex flex-column">
+        <div class="content flex-grow-1 p-3 overflow-auto">
+          <router-outlet></router-outlet>
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+</ng-container>
+
+<!-- Layout público (no autenticado) -->
 <ng-template #notAuthenticated>
-  <!-- Si el usuario NO está autenticado, mostramos la estructura normal -->
   <app-nav-bar navLight="true"></app-nav-bar>
   <router-outlet></router-outlet>
   <app-footer></app-footer>

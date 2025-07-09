@@ -33,11 +33,17 @@ import { CitaModalComponent } from '../cita-modal/cita-modal.component';
 export class ListaEsperaComponent implements OnInit {
   empresa: string = '';
   listaEspera: any[] = [];
+  listaEsperaPaginada: any[] = [];
+
   clientes: any[] = [];
   clientesFiltrados: any[] = [];
   mostrarAutocomplete = false;
   nombreCliente = '';
   telefonoCliente = '';
+
+  paginaActual = 1;
+  elementosPorPagina = 8;
+  totalPaginas = 1;
 
   waitForm: FormGroup;
 
@@ -65,7 +71,47 @@ export class ListaEsperaComponent implements OnInit {
   }
 
   cargarLista() {
-    this.api.getListaEsperaPorEmpresa(this.empresa).subscribe(lista => this.listaEspera = lista);
+    this.api.getListaEsperaPorEmpresa(this.empresa).subscribe(lista => {
+      this.listaEspera = lista;
+      this.actualizarPaginacion();
+    });
+  }
+
+  actualizarPaginacion(): void {
+    const inicio = (this.paginaActual - 1) * this.elementosPorPagina;
+    const fin = inicio + this.elementosPorPagina;
+    this.listaEsperaPaginada = this.listaEspera.slice(inicio, fin);
+    this.totalPaginas = Math.ceil(this.listaEspera.length / this.elementosPorPagina);
+  }
+
+  cambiarPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPaginas) {
+      this.paginaActual = pagina;
+      this.actualizarPaginacion();
+    }
+  }
+
+  get totalPaginasArray(): number[] {
+    const maxVisible = 5;
+    const total = this.totalPaginas;
+
+    if (total <= maxVisible) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    const half = Math.floor(maxVisible / 2);
+    let start = this.paginaActual - half;
+    let end = this.paginaActual + half;
+
+    if (start < 1) {
+      start = 1;
+      end = maxVisible;
+    } else if (end > total) {
+      end = total;
+      start = total - maxVisible + 1;
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
   filtrarClientes(event: any) {
@@ -80,7 +126,6 @@ export class ListaEsperaComponent implements OnInit {
 
   onInputChange(event: any) {
     const valor = event.target.value.trim();
-    // Verificamos si es teléfono (solo números, posiblemente con espacios o guiones)
     const soloNumeros = /^[- +()0-9]{7,15}$/.test(valor);
 
     if (soloNumeros) {
@@ -111,7 +156,6 @@ export class ListaEsperaComponent implements OnInit {
     const nombreInicial = this.nombreCliente;
     const telefonoInicial = this.telefonoCliente;
 
-    // Expresión regular para validar teléfonos españoles
     const telefonoValido = /^((\+34|0034)?[\s-]?)([6789]\d{2})[\s-]?(\d{3})[\s-]?(\d{3})$/;
 
     if (telefonoInicial && !telefonoValido.test(telefonoInicial)) {

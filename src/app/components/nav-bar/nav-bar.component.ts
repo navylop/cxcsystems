@@ -1,8 +1,8 @@
 import { Component, Inject, HostListener, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { faUser, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '@auth0/auth0-angular';
-import { AsyncPipe, DOCUMENT, NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   NgbCollapse,
@@ -11,7 +11,6 @@ import {
   NgbDropdownToggle,
 } from '@ng-bootstrap/ng-bootstrap';
 import { RouterLink } from '@angular/router';
-
 import * as feather from 'feather-icons';
 
 @Component({
@@ -36,60 +35,79 @@ export class NavBarComponent {
   faUser = faUser;
   faPowerOff = faPowerOff;
 
-  @Input() navLight:any;
-  @Input()bgWhite:any
+  @Input() navLight: any;
+  @Input() bgWhite: any;
 
   scrolled: boolean = false;
-  currentUrl: string = ''; // Para guardar el pathname
-  currentHash: string = ''; // Para guardar el hash actual
+  currentUrl: string = '';
+  currentHash: string = '';
   showToggleMenu: boolean = false;
-  subManu:string = ''
-
-  @HostListener("window:scroll", [])
-
-  onWindowScroll() {
-      this.scrolled = window.scrollY > 0;
-  }
-
-  @HostListener("window:hashchange", [])
-
-  onHashChange() {
-    this.updateActiveSection();
-  }
+  subManu: string = '';
 
   constructor(
     public auth: AuthService,
     @Inject(DOCUMENT) private doc: Document
   ) {}
 
-  ngOnInit(): void {    
-    this.currentUrl = window.location.pathname
-    this.updateActiveSection();
+  ngOnInit(): void {
+    this.currentUrl = window.location.pathname;
+    this.detectActiveSection();
     window.scrollTo(0, 0);
-  }
-
-  openSubManu(item:string){
-      this.subManu = item
-  }
-
-  toggleMenu(){
-    this.showToggleMenu = !this.showToggleMenu
   }
 
   ngAfterViewInit() {
     feather.replace();
   }
 
-  private updateActiveSection() {    
-    //this.currentHash = window.location.hash || '#home'; // Por defecto, #home
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    const nav = this.doc.getElementById('topnav');
+    this.scrolled = window.scrollY > 0;
+    this.detectActiveSection();
+  }
+  
+  scrollToSection(event: Event, sectionId: string): void {
+    event.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  private detectActiveSection(): void {
+    const sections = ['home', 'software-features', 'pricing', 'gestion-citas', 'contact'];
+    const scrollPos = window.scrollY + 100;
+
+    for (let id of sections) {
+      const section = document.getElementById(id);
+      if (section) {
+        const top = section.offsetTop;
+        const bottom = top + section.offsetHeight;
+        if (scrollPos >= top && scrollPos < bottom) {
+          this.currentHash = `#${id}`;
+          break;
+        }
+      }
+    }
+  }
+
+  private updateActiveSection(): void {
     this.currentHash = window.location.hash;
   }
 
-  loginWithRedirect() {
+  toggleMenu(): void {
+    this.showToggleMenu = !this.showToggleMenu;
+  }
+
+  openSubManu(item: string): void {
+    this.subManu = item;
+  }
+
+  loginWithRedirect(): void {
     this.auth.loginWithRedirect();
   }
 
-  logout() {
+  logout(): void {
     this.auth.logout({ logoutParams: { returnTo: this.doc.location.origin } });
   }
 }

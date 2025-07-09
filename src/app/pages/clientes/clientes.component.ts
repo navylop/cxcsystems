@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { TipoNotificacion } from '../../models/tipo-notificacion';
+import { Modal } from 'bootstrap';  
 
 //excel
 import * as XLSX from 'xlsx';
@@ -37,6 +38,12 @@ export class ClientesComponent implements OnInit {
 
   ordenColumna: string = 'nombre';
   ordenAscendente: boolean = true;
+
+  @ViewChild('citasModal') citasModalRef!: ElementRef;
+  private bsModal?: Modal;
+
+  citasCliente: any[] = [];
+  clienteActual: any;
 
   constructor(
     private api: ApiService,
@@ -261,5 +268,27 @@ export class ClientesComponent implements OnInit {
 
   getNombreTipo(tipo: number): string {
     return TipoNotificacion[tipo] ?? 'Desconocido';
+  }
+
+  // 👉 Llama al API y abre el modal
+  abrirModalCitas(cliente: any): void {
+    this.clienteActual = cliente;
+
+    // ⚠️ Ajusta el nombre del método en tu ApiService
+    this.api.getCitasPorCliente(this.id_empresa, cliente.id_cliente)
+      .subscribe(citas => {
+        this.citasCliente = citas;
+
+        // Bootstrap 5: crea el modal y muéstralo
+        if (!this.bsModal) {
+          this.bsModal = new Modal(this.citasModalRef.nativeElement);
+        }
+        this.bsModal.show();
+      });
+  }
+
+  // 👉 Simplemente cierra
+  cerrarModal(): void {
+    this.bsModal?.hide();
   }
 }

@@ -14,9 +14,16 @@ import { AuthService } from '@auth0/auth0-angular';
 })
 export class NotasComponent implements OnInit, OnDestroy {
   notas: any[] = [];
+  notasPaginadas: any[] = [];
+
   notaForm: any = this.resetNotaForm();
   editando = false;
   id_empresa: string | undefined;
+
+  paginaActual = 1;
+  elementosPorPagina = 8;
+  totalPaginas = 1;
+
   userSub: Subscription = new Subscription();
   private authSubscription: Subscription | undefined;
 
@@ -57,6 +64,7 @@ export class NotasComponent implements OnInit, OnDestroy {
     if (!this.id_empresa) return;
     this.api.getNotasPorEmpresa(this.id_empresa).subscribe(data => {
       this.notas = data;
+      this.actualizarPaginacion();
     });
   }
 
@@ -69,8 +77,6 @@ export class NotasComponent implements OnInit, OnDestroy {
       delete this.notaForm.id_nota;
     }
 
-    console.log(this.notaForm);
-
     const accion = this.editando
       ? this.api.updateNota(this.notaForm)
       : this.api.createNota(this.notaForm);
@@ -81,7 +87,6 @@ export class NotasComponent implements OnInit, OnDestroy {
       this.cargarNotas();
     });
   }
-
 
   editarNota(nota: any): void {
     this.notaForm = { ...nota };
@@ -99,5 +104,42 @@ export class NotasComponent implements OnInit, OnDestroy {
         this.cargarNotas();
       });
     }
+  }
+
+  cambiarPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPaginas) {
+      this.paginaActual = pagina;
+      this.actualizarPaginacion();
+    }
+  }
+
+  actualizarPaginacion(): void {
+    const inicio = (this.paginaActual - 1) * this.elementosPorPagina;
+    const fin = inicio + this.elementosPorPagina;
+    this.notasPaginadas = this.notas.slice(inicio, fin);
+    this.totalPaginas = Math.ceil(this.notas.length / this.elementosPorPagina);
+  }
+
+  get totalPaginasArray(): number[] {
+    const maxVisible = 5;
+    const total = this.totalPaginas;
+
+    if (total <= maxVisible) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    const half = Math.floor(maxVisible / 2);
+    let start = this.paginaActual - half;
+    let end = this.paginaActual + half;
+
+    if (start < 1) {
+      start = 1;
+      end = maxVisible;
+    } else if (end > total) {
+      end = total;
+      start = total - maxVisible + 1;
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 }

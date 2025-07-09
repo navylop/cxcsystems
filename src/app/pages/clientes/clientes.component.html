@@ -49,9 +49,9 @@
   
     <!-- Botones -->
     <div class="d-flex flex-wrap gap-2 mt-2">
-      <button type="submit" class="btn btn-primary btn-sm"
-              [disabled]="clienteFormRef.invalid">
-        {{ editando ? 'Actualizar' : 'Crear' }}
+      <button type="button" class="btn btn-primary btn-sm"
+              (click)="buscarClientes()">
+        Buscar
       </button>
   
       <button type="button" class="btn btn-secondary btn-sm"
@@ -59,9 +59,9 @@
         Limpiar
       </button>
   
-      <button type="button" class="btn btn-info btn-sm ms-auto"
-              (click)="buscarClientes()">
-        Buscar
+      <button type="submit" class="btn btn-info btn-sm ms-auto"
+              [disabled]="clienteFormRef.invalid">
+        {{ editando ? 'Actualizar' : 'Crear' }}
       </button>
       <button type="button" class="btn btn-success btn-sm"
               (click)="exportarAExcel()">
@@ -117,6 +117,7 @@
         <td>{{ getNombreTipo(cliente.tipo_notificacion) }}</td>
         <td class="acciones-col text-center">
           <button class="btn btn-sm btn-warning me-2" (click)="editarCliente(cliente)">Editar</button>
+          <button class="btn btn-sm btn-info me-2" (click)="abrirModalCitas(cliente)">Citas</button>
           <button class="btn btn-sm btn-danger" (click)="eliminarCliente(cliente)">Eliminar</button>
         </td>
       </tr>
@@ -154,5 +155,51 @@
 
     </ul>
   </nav>
-
 </div>
+
+<!-- Modal Citas -->
+<div #citasModal class="modal fade" tabindex="-1" aria-labelledby="citasModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Citas de {{ clienteActual?.nombre || '—' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <ng-container *ngIf="citasCliente?.length; else sinCitas">
+          <table class="table table-bordered table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Nota</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cita of citasCliente">
+                <td>{{ cita.fecha_cita | date : 'dd/MM/yyyy' }}</td>
+                <td>{{ cita.hora }}</td>
+                <td>{{ cita.nota }}</td>
+                <td>{{ cita.estado }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+
+        <ng-template #sinCitas>
+          <p class="text-center m-0">Este cliente no tiene citas programadas.</p>
+        </ng-template>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+                (click)="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
